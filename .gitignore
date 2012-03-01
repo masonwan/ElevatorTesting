@@ -1,0 +1,11 @@
+# From https://github.com/github/gitignore/blob/master/Java.gitignore
+#####################################################################
+*.class
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+# External libraries
+/Jars

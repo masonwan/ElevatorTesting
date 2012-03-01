@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="AdminConsole_v1/src"/>
+	<classpathentry kind="src" path="Alarm/src"/>
+	<classpathentry kind="src" path="Algorithm_v1/src"/>
+	<classpathentry kind="src" path="Car_v1/src"/>
+	<classpathentry kind="src" path="CarController_v1/src"/>
+	<classpathentry kind="src" path="Door/src"/>
+	<classpathentry kind="src" path="DoorPanel/src"/>
+	<classpathentry kind="src" path="FloorPanel_v1/src"/>
+	<classpathentry kind="src" path="FloorPanelQueue/src"/>
+	<classpathentry kind="src" path="Jars/jgoodies-forms-1.4.2/src/core"/>
+	<classpathentry kind="src" path="Jars/jgoodies-forms-1.4.2/src/extras"/>
+	<classpathentry kind="src" path="Jars/jgoodies-forms-1.4.2/src/test"/>
+	<classpathentry kind="src" path="MetaController/src"/>
+	<classpathentry kind="src" path="UserPanel_v1/src"/>
+	<classpathentry kind="src" path="UserPanelQueue/src"/>
+	<classpathentry kind="lib" path="Jars/AdminConsole_v2.jar"/>
+	<classpathentry kind="lib" path="Jars/Alarm.jar"/>
+	<classpathentry kind="lib" path="Jars/Algorithm_v2.jar"/>
+	<classpathentry kind="lib" path="Jars/Car_v2.jar"/>
+	<classpathentry kind="lib" path="Jars/CarController_v2.jar"/>
+	<classpathentry kind="lib" path="Jars/Door.jar"/>
+	<classpathentry kind="lib" path="Jars/DoorPanel.jar"/>
+	<classpathentry kind="lib" path="Jars/FloorPanel_v2.jar"/>
+	<classpathentry kind="lib" path="Jars/FloorPanelQueue.jar"/>
+	<classpathentry kind="lib" path="Jars/jgoodies-forms-1.4.2/jgoodies-forms-1.4.2.jar"/>
+	<classpathentry kind="lib" path="Jars/jgoodies-forms-1.4.2/lib/jgoodies-common-1.2.1.jar"/>
+	<classpathentry kind="lib" path="Jars/MetaController_v2.jar"/>
+	<classpathentry kind="lib" path="Jars/Old Jars/Algorithm_v1.jar"/>
+	<classpathentry kind="lib" path="Jars/Old Jars/Car_v1.jar"/>
+	<classpathentry kind="lib" path="Jars/Old Jars/CarController_v1.jar"/>
+	<classpathentry kind="lib" path="Jars/Old Jars/FloorPanel_v1.jar"/>
+	<classpathentry kind="lib" path="Jars/Old Jars/MetaController_v1.jar"/>
+	<classpathentry kind="lib" path="Jars/Old Jars/Userpanel_v1.jar"/>
+	<classpathentry kind="lib" path="Jars/Old Jars/UserPanelQueue.jar"/>
+	<classpathentry kind="lib" path="Jars/UserPanel_v2.jar"/>
+	<classpathentry kind="lib" path="Jars/UserPanelQueue_v2.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="C:/Users/ShaVik/workspace1/Snig_Proj/Jars/AdminConsole_v2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/ShaVik/workspace1/Snig_Proj/Jars/Alarm.jar"/>
+	<classpathentry kind="lib" path="C:/Users/ShaVik/workspace1/Snig_Proj/Jars/Algorithm_v2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/ShaVik/workspace1/Snig_Proj/Jars/Car_v2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/ShaVik/workspace1/Snig_Proj/Jars/CarController_v2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/ShaVik/workspace1/Snig_Proj/Jars/Door.jar"/>
+	<classpathentry kind="lib" path="C:/Users/ShaVik/workspace1/Snig_Proj/Jars/DoorPanel.jar"/>
+	<classpathentry kind="lib" path="C:/Users/ShaVik/workspace1/Snig_Proj/Jars/FloorPanel_v2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/ShaVik/workspace1/Snig_Proj/Jars/FloorPanelQueue.jar"/>
+	<classpathentry kind="lib" path="C:/Users/ShaVik/workspace1/Snig_Proj/Jars/MetaController_v2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/ShaVik/workspace1/Snig_Proj/Jars/UserPanel_v2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/ShaVik/workspace1/Snig_Proj/Jars/UserPanelQueue_v2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/ShaVik/workspace1/Snig_Proj/Jars/jgoodies-forms-1.4.2/jgoodies-forms-1.4.2.jar"/>
+	<classpathentry kind="output" path="UserPanel_v1/bin"/>
+</classpath>
