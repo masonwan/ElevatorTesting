@@ -2,6 +2,16 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Jars"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/Alarm"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/Algorithm"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/Car"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/CarController"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/Door"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/DoorPanel"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/FloorPanel"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/FloorPanelQueue"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/MetaController"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/UserPanel"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/UserPanelQueue"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
