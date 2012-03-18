@@ -9,3 +9,6 @@
 
 # External libraries
 /Jars
+
+# eclipse
+.metadata
