@@ -22,7 +22,6 @@ public class DoorPanelQueue {
 
 	void setCar(ICar car) {
 		this.car = car;
-		l
 	}
 
 	private class DoorPanelQueueMonitorThread implements Runnable {
