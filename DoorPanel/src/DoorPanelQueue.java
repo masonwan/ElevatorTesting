@@ -8,14 +8,12 @@ public class DoorPanelQueue {
 
 	public DoorPanelQueue(ICar car) {
 		this.car = car;
-		Thread doorPanelMonitorThread = new Thread(
-				new DoorPanelQueueMonitorThread());
+		Thread doorPanelMonitorThread = new Thread(new DoorPanelQueueMonitorThread());
 		doorPanelMonitorThread.start();
 	}
 
 	void putDoorPanelRequest(DoorCommand doorCommand) {
 
-		
 		if (!doorPanelRequest.contains(doorCommand)) {
 			System.out.println("Request put in queue");
 			doorPanelRequest.offer(doorCommand);
@@ -24,7 +22,7 @@ public class DoorPanelQueue {
 
 	void setCar(ICar car) {
 		this.car = car;
-		
+		l
 	}
 
 	private class DoorPanelQueueMonitorThread implements Runnable {

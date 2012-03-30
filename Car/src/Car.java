@@ -9,28 +9,28 @@ public class Car implements ICar {
 	String carName = "Car";
 
 	IUserPanel userPanel = null;
-	
+
 	IDoorPanel doorPanel = null;
 
 	CarUI carUI = null;
-	
+
 	ICarController carController = null;
-	
+
 	IUserPanelQueue queue = null;
 
 	CarStatus status = CarStatus.IDLE;
-	
+
 	CarRunnable carRunnable = null;
-	
+
 	Thread carThread = null;
-	
-	//Pinky Code Added
+
+	// Pinky Code Added
 	int carID;
-	//static int id=0;
-	
-	
+
+	// static int id=0;
+
 	public Car() {
-		//this.carID=++Car.id;
+		// this.carID=++Car.id;
 		carRunnable = new CarRunnable();
 		carThread = new Thread(carRunnable);
 	}
@@ -42,11 +42,11 @@ public class Car implements ICar {
 	public void setCarID(int carID) {
 		this.carID = carID;
 	}
-	
-	public String getCarType(){
-		if(userPanel.getSelection()==1)
+
+	public String getCarType() {
+		if (userPanel.getSelection() == 1)
 			return "even";
-		else if(userPanel.getSelection()==2)
+		else if (userPanel.getSelection() == 2)
 			return "odd";
 		return "seq";
 	}
@@ -60,7 +60,7 @@ public class Car implements ICar {
 	}
 
 	public JPanel createCar() {
-		
+
 		carUI = new CarUI(currentFloorNumber, carName, door, userPanel, doorPanel);
 		return carUI;
 	}
@@ -71,25 +71,26 @@ public class Car implements ICar {
 
 	public void setCurrentFloorNumber(int currentFloorNumber) {
 		this.currentFloorNumber = currentFloorNumber;
-		if(carUI!=null){
+		if (carUI != null) {
 			carUI.setCurrentFloorNumber(currentFloorNumber);
-			this.carController.getFloorPanel().processStatusRequest(this.carRunnable.destinationFloorNumber,currentFloorNumber);
+			this.carController.getFloorPanel().processStatusRequest(this.carRunnable.destinationFloorNumber, currentFloorNumber);
 		}
 	}
-	
+
 	/* 10/23/2011 - Snigdha, Alarm handling */
 	public void processAlarmRequest(int currentFloorNumber, int currentCarNumber) {
 		this.currentFloorNumber = currentFloorNumber;
 		this.carID = currentCarNumber;
 		this.carController.getFloorPanel().processAlarmRequest(currentFloorNumber, currentCarNumber);
 	}
-	
+
 	public void processAlarmReset(int currentFloorNumber, int currentCarNumber) {
 		this.currentFloorNumber = currentFloorNumber;
 		this.carID = currentCarNumber;
 		this.carController.getFloorPanel().processAlarmReset(currentFloorNumber, currentCarNumber);
 	}
-	//--------------
+
+	// --------------
 
 	public IDoor getDoor() {
 		return door;
@@ -123,7 +124,7 @@ public class Car implements ICar {
 	@Override
 	public void setUserPanelQueue(IUserPanelQueue userPanelQueue) {
 		this.queue = userPanelQueue;
-		
+
 	}
 
 	@Override
@@ -135,25 +136,20 @@ public class Car implements ICar {
 		carRunnable.setDestinationFloorNumber(destinationFloorNo);
 		carRunnable.setDirection("DOWN");
 		carThread.start();
-		
-		
+
 	}
 
 	@Override
-	public synchronized void  moveUp(int destinationFloorNo) {
-		
-		setStatus(CarStatus.MOVING_UP);		
+	public synchronized void moveUp(int destinationFloorNo) {
+
+		setStatus(CarStatus.MOVING_UP);
 		carRunnable = new CarRunnable();
 		carThread = new Thread(carRunnable);
 		carRunnable.setCar(this);
 		carRunnable.setDestinationFloorNumber(destinationFloorNo);
 		carRunnable.setDirection("UP");
 		carThread.start();
-		
-		
-		
-		
-		
+
 	}
 
 	@Override
@@ -164,9 +160,9 @@ public class Car implements ICar {
 	@Override
 	public void setStatus(CarStatus status) {
 		this.status = status;
-		if(carUI!=null)
+		if (carUI != null)
 			carUI.setCarStatus(status);
-		
+
 	}
 
 	@Override
@@ -177,21 +173,19 @@ public class Car implements ICar {
 	@Override
 	public void setDoorPanel(IDoorPanel doorPanel) {
 		this.doorPanel = doorPanel;
-		
-	}
 
+	}
 
 }
 
-
 class CarRunnable implements Runnable {
-	
+
 	ICar car = null;
 
 	int destinationFloorNumber = 0;
-	
+
 	String direction = null;
-	
+
 	public String getDirection() {
 		return direction;
 	}
@@ -207,83 +201,79 @@ class CarRunnable implements Runnable {
 	public void setDestinationFloorNumber(int destinationFloorNumber) {
 		this.destinationFloorNumber = destinationFloorNumber;
 	}
-	
-	public CarRunnable(){
-		
+
+	public CarRunnable() {
+
 	}
-	
-	public CarRunnable(ICar car, int destinationFloorNumber){
-		
+
+	public CarRunnable(ICar car, int destinationFloorNumber) {
+
 		this.car = car;
-		
+
 		this.destinationFloorNumber = destinationFloorNumber;
 	}
 
 	@Override
 	public void run() {
-		
-		car.getCarController().getFloorPanel().processIndicatorRequest(destinationFloorNumber,car.getCarID(),car.getCarType());
-		if(direction.equalsIgnoreCase("UP")){
-			
-			synchronized(car){
+
+		car.getCarController().getFloorPanel().processIndicatorRequest(destinationFloorNumber, car.getCarID(), car.getCarType());
+		if (direction.equalsIgnoreCase("UP")) {
+
+			synchronized (car) {
 				/** 10/23/2011 - Snigdha, Check for alarm pressed status added **/
-				while(car.getCurrentFloorNumber() != destinationFloorNumber){
+				while (car.getCurrentFloorNumber() != destinationFloorNumber) {
 					try {
 						Thread.sleep(2000);
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					if(car.getStatus() ==CarStatus.ALARM_PRESSED)
+					if (car.getStatus() == CarStatus.ALARM_PRESSED)
 						break;
 					car.setCurrentFloorNumber(car.getCurrentFloorNumber() + 1);
 				}
 				/** 10/23/2011 - Snigdha, Check for alarm pressed status added **/
-				if(car.getStatus() != CarStatus.ALARM_PRESSED)
-				{
+				if (car.getStatus() != CarStatus.ALARM_PRESSED) {
 					car.setStatus(CarStatus.STOPPED);
-					
+
 					try {
 						Thread.currentThread().sleep(2000);
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					System.out.println("Reached destination "+ destinationFloorNumber);
+					System.out.println("Reached destination " + destinationFloorNumber);
 					car.notifyAll();
-				}
-				else
+				} else
 					System.out.println("Car.java: Alarm pressed");
 			}
-		}else{
-			synchronized(car){
-				while(car.getCurrentFloorNumber() != destinationFloorNumber && car.getStatus() !=CarStatus.ALARM_PRESSED){
+		} else {
+			synchronized (car) {
+				while (car.getCurrentFloorNumber() != destinationFloorNumber && car.getStatus() != CarStatus.ALARM_PRESSED) {
 					try {
 						Thread.sleep(2000);
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					car.setCurrentFloorNumber(car.getCurrentFloorNumber() -1 );
+					car.setCurrentFloorNumber(car.getCurrentFloorNumber() - 1);
 				}
 				/** 10/23/2011 - Snigdha, Check for alarm pressed status added **/
-				if(car.getStatus() != CarStatus.ALARM_PRESSED)
-				{
+				if (car.getStatus() != CarStatus.ALARM_PRESSED) {
 					car.setStatus(CarStatus.STOPPED);
-					
+
 					try {
 						Thread.currentThread().sleep(2000);
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					System.out.println("Reached destination "+ destinationFloorNumber);
+					System.out.println("Reached destination " + destinationFloorNumber);
 					car.notifyAll();
-				}
-				else
+				} else
 					System.out.println("Car.java: Alarm pressed");
 			}
 		}
-		
+
 	}
 }

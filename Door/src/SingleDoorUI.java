@@ -1,18 +1,13 @@
-import java.awt.Color;
-import java.awt.FlowLayout;
+import java.awt.*;
 
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.*;
 
+public class SingleDoorUI extends JPanel {
 
-public class SingleDoorUI extends JPanel{
-	
-	
 	JTextField textDoorStatus = null;
-	
-	public SingleDoorUI(){
-		
+
+	public SingleDoorUI() {
+
 		System.out.println("Creating layout");
 		setLayout(new FlowLayout());
 		JLabel label = new JLabel("Single Door");
@@ -20,15 +15,15 @@ public class SingleDoorUI extends JPanel{
 		textDoorStatus.setText("CLOSED");
 		textDoorStatus.setEnabled(false);
 		add(label);
-		add(textDoorStatus);		
-		
+		add(textDoorStatus);
+
 	}
-	
-	public void setDoorStatus(String doorStatus){
+
+	public void setDoorStatus(String doorStatus) {
 		textDoorStatus.setText(doorStatus);
-		if(doorStatus.equalsIgnoreCase("CLOSED") || doorStatus.equalsIgnoreCase("OPENED")){
+		if (doorStatus.equalsIgnoreCase("CLOSED") || doorStatus.equalsIgnoreCase("OPENED")) {
 			textDoorStatus.setBackground(null);
-		}else{
+		} else {
 			textDoorStatus.setBackground(Color.yellow);
 		}
 	}
