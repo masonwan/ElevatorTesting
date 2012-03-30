@@ -17,25 +17,22 @@ public class UserPanelUI extends JPanel {
 	private UserPanelColor activeButtonColor = null;
 
 	private UserPanelColor buttonColor = null;
-	
-	
+
 	// Code Added by Deepshikha
 	JButton AlarmButtonOn = null;
 	String AlarmTextOn = "Alarm On";
-	
+
 	JButton AlarmButtonOff = null;
 	String AlarmTextOff = "Alarm Off";
-	
-	/* *************************/
+
+	/* ************************ */
 
 	private List<JButton> lstUserPanelButtons = new ArrayList<JButton>();
 
-
-
 	public UserPanelUI(int numFloors, UserPanelColor buttonColor,
 			UserPanelColor activeButtonColor, ICar car) {
-		
-		System.out.println("Inside UsserPanel UI "+ car);
+
+		System.out.println("Inside UsserPanel UI " + car);
 
 		this.car = car;
 
@@ -44,29 +41,28 @@ public class UserPanelUI extends JPanel {
 		this.buttonColor = buttonColor;
 
 		int newNumFloors = 0;
-		
+
 		// Code for Alarm Button - Deepshikha
-				/* **********************  */
-				
-				GridBagConstraints gbc = new GridBagConstraints();
-				gbc.gridy = 1;
-				
-				AlarmFactory.alarmConfig(this);
-				AlarmButtonOn = new JButton(AlarmTextOn);
-				AlarmButtonOn.setBackground(buttonColor.getJColor());
-				AlarmListener alarmOnListner = new AlarmListener();
-				AlarmButtonOn.addActionListener(alarmOnListner);
-				add(AlarmButtonOn , gbc);
-				
-				
-				AlarmButtonOff = new JButton(AlarmTextOff);
-				AlarmButtonOff.setBackground(buttonColor.getJColor());
-				AlarmListener1 alarmOffListner = new AlarmListener1();
-				AlarmButtonOff.addActionListener(alarmOffListner);
-				add(AlarmButtonOff , gbc);
-				AlarmButtonOff.setEnabled(false);
-				
-				/* **********************  */
+		/* ********************** */
+
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.gridy = 1;
+
+		AlarmFactory.alarmConfig(this);
+		AlarmButtonOn = new JButton(AlarmTextOn);
+		AlarmButtonOn.setBackground(buttonColor.getJColor());
+		AlarmListener alarmOnListner = new AlarmListener();
+		AlarmButtonOn.addActionListener(alarmOnListner);
+		add(AlarmButtonOn, gbc);
+
+		AlarmButtonOff = new JButton(AlarmTextOff);
+		AlarmButtonOff.setBackground(buttonColor.getJColor());
+		AlarmListener1 alarmOffListner = new AlarmListener1();
+		AlarmButtonOff.addActionListener(alarmOffListner);
+		add(AlarmButtonOff, gbc);
+		AlarmButtonOff.setEnabled(false);
+
+		/* ********************** */
 
 		setPreferredSize(new Dimension(200, 200));
 		if (numFloors % 3 != 0) {
@@ -79,102 +75,94 @@ public class UserPanelUI extends JPanel {
 
 		for (int i = 1; i <= numFloors; i++) {
 			JButton button = new JButton("" + i);
-			
+
 			System.out.println("Button Text" + button.getText());
 			System.out.println("Button Color" + buttonColor);
 			button.setBackground(buttonColor.getJColor());
-			button.addActionListener(
-					new UserPanelButtonListener(button.getText(), car, activeButtonColor));
+			button.addActionListener(new UserPanelButtonListener(button
+					.getText(), car, activeButtonColor));
 			add(button);
 			lstUserPanelButtons.add(button);
 
 		}
 
 	}
-	
-	public void deactivateFloorButton(int floorNumber){
-		
-		for(JButton button : lstUserPanelButtons){
-			if(Integer.parseInt(button.getText()) == floorNumber){
+
+	public void deactivateFloorButton(int floorNumber) {
+
+		for (JButton button : lstUserPanelButtons) {
+			if (Integer.parseInt(button.getText()) == floorNumber) {
 				button.setBackground(buttonColor.getJColor());
 				break;
 			}
 		}
-		
+
 	}
-	
+
 	// Code for Alarm Button On ActionListner - Deepshikha
-		/* **********************  */
-		
-		void disableAlarmButtonOn ()
-		{
-			AlarmButtonOn.setEnabled(false);
-			
-		}
-		
-		void processedRequest()
-		{
-			AlarmButtonOn.setBackground(buttonColor.getJColor());
-		}
-		
-		private class AlarmListener implements ActionListener 
-		{
-			public void actionPerformed(ActionEvent event)
-			{
-				AlarmButtonOn.setBackground(Color.RED);
-				
-				AlarmButtonOff.setEnabled(true);
-				
-				int currentFloorNumber = car.getCurrentFloorNumber();
-				int currentCarNumber = car.getCarID();
-				
-				// 10/23/2011 - Snigdha, Added logic for Alarm on
-				car.setStatus(CarStatus.ALARM_PRESSED);
-				for(JButton button : lstUserPanelButtons){
-					button.setEnabled(false);
-				}
+	/* ********************** */
 
-				car.processAlarmRequest(currentFloorNumber, currentCarNumber);
+	void disableAlarmButtonOn() {
+		AlarmButtonOn.setEnabled(false);
+
+	}
+
+	void processedRequest() {
+		AlarmButtonOn.setBackground(buttonColor.getJColor());
+	}
+
+	private class AlarmListener implements ActionListener {
+		public void actionPerformed(ActionEvent event) {
+			AlarmButtonOn.setBackground(Color.RED);
+
+			AlarmButtonOff.setEnabled(true);
+
+			int currentFloorNumber = car.getCurrentFloorNumber();
+			int currentCarNumber = car.getCarID();
+
+			// 10/23/2011 - Snigdha, Added logic for Alarm on
+			car.setStatus(CarStatus.ALARM_PRESSED);
+			for (JButton button : lstUserPanelButtons) {
+				button.setEnabled(false);
 			}
+
+			car.processAlarmRequest(currentFloorNumber, currentCarNumber);
 		}
-		
-		// Code for Alarm Button Off ActionListner - Deepshikha
-				/* **********************  */
-		
-		void disableAlarmButtonOff ()
-		{
+	}
+
+	// Code for Alarm Button Off ActionListner - Deepshikha
+	/* ********************** */
+
+	void disableAlarmButtonOff() {
+		AlarmButtonOff.setEnabled(false);
+
+	}
+
+	void processedRequest1() {
+		AlarmButtonOff.setBackground(buttonColor.getJColor());
+	}
+
+	private class AlarmListener1 implements ActionListener {
+		public void actionPerformed(ActionEvent event) {
+			AlarmButtonOff.setBackground(Color.GREEN);
+			AlarmButtonOn.setBackground(Color.GREEN);
 			AlarmButtonOff.setEnabled(false);
-			
-		}
-					
-		void processedRequest1()
-		{
-			AlarmButtonOff.setBackground(buttonColor.getJColor());
-		}	
-		
-		private class AlarmListener1 implements ActionListener 
-		{
-			public void actionPerformed(ActionEvent event)
-			{
-				AlarmButtonOff.setBackground(Color.GREEN);
-				AlarmButtonOn.setBackground(Color.GREEN);
-				AlarmButtonOff.setEnabled(false);
-				
-				int currentFloorNumber = car.getCurrentFloorNumber();
-				int currentCarNumber = car.getCarID();
-				
-				//10/23/2011 - Snigdha, Added logic for Alarm off
-				car.setStatus(CarStatus.IDLE);
-				
-				for(JButton button : lstUserPanelButtons){
-					button.setEnabled(true);
-					button.setBackground(buttonColor.getJColor());;
-				}
-				
-				car.processAlarmReset(currentFloorNumber, currentCarNumber);
 
+			int currentFloorNumber = car.getCurrentFloorNumber();
+			int currentCarNumber = car.getCarID();
+
+			// 10/23/2011 - Snigdha, Added logic for Alarm off
+			car.setStatus(CarStatus.IDLE);
+
+			for (JButton button : lstUserPanelButtons) {
+				button.setEnabled(true);
+				button.setBackground(buttonColor.getJColor());
+				;
 			}
+
+			car.processAlarmReset(currentFloorNumber, currentCarNumber);
+
 		}
-				
+	}
 
 }
