@@ -4,7 +4,6 @@ public class UserPanelRequest {
 
 	public UserPanelRequest(int destinationFloorNumber, ICar car) {
 		this.destinationFloorNumber = destinationFloorNumber;
-
 	}
 
 	public int getDestinationFloorNumber() {
@@ -19,6 +18,7 @@ public class UserPanelRequest {
 	@Override
 	public boolean equals(Object arg0) {
 		UserPanelRequest u = (UserPanelRequest) arg0;
+
 		if (destinationFloorNumber == u.destinationFloorNumber) {
 			return true;
 		}

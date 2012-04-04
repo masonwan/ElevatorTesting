@@ -1,7 +1,5 @@
 public class UserPanelQueueFactory {
-
 	public static IUserPanelQueue getUserPanelQueueInstance() {
-
 		IUserPanelQueue userPanelQueue = null;
 		ICar car = null;
 		ICarController carController = null;
@@ -9,6 +7,7 @@ public class UserPanelQueueFactory {
 		if (UserPanelQueueConfiguration.getUserPanelQueueType().equalsIgnoreCase("default")) {
 			userPanelQueue = new UserPanelQueue();
 		}
+
 		if (UserPanelQueueConfiguration.getCarType().equalsIgnoreCase("default")) {
 			car = new Car();
 			userPanelQueue.setCar(car);
@@ -21,5 +20,4 @@ public class UserPanelQueueFactory {
 
 		return userPanelQueue;
 	}
-
 }

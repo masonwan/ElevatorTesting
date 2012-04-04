@@ -12,7 +12,6 @@ public class DoorPanelUI extends JPanel {
 	DoorPanelQueue doorPanelQueue = null;
 
 	public DoorPanelUI(DoorPanelQueue doorPanelQueue, String openText, String closeText) {
-
 		this.doorPanelQueue = doorPanelQueue;
 		setLayout(new FlowLayout());
 		openButton = new JButton(openText);
@@ -26,7 +25,6 @@ public class DoorPanelUI extends JPanel {
 	}
 
 	void activateOpenButton() {
-
 		openButton.setBackground(Color.YELLOW);
 	}
 
@@ -54,5 +52,4 @@ public class DoorPanelUI extends JPanel {
 			doorPanelQueue.putDoorPanelRequest(DoorCommand.CLOSE);
 		}
 	}
-
 }

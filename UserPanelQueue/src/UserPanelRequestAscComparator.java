@@ -1,10 +1,8 @@
 import java.util.*;
 
 public class UserPanelRequestAscComparator implements Comparator {
-
 	@Override
 	public int compare(Object arg0, Object arg1) {
-
 		UserPanelRequest upr1 = (UserPanelRequest) arg0;
 		UserPanelRequest upr2 = (UserPanelRequest) arg1;
 
@@ -18,5 +16,4 @@ public class UserPanelRequestAscComparator implements Comparator {
 
 		return 0;
 	}
-
 }

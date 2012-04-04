@@ -16,7 +16,6 @@ public class DoorPanel implements IDoorPanel {
 	String closeText = null;
 
 	public JPanel createDoorPanelUI() {
-
 		doorPanelQueue = new DoorPanelQueue(car);
 		doorPanelUI = new DoorPanelUI(doorPanelQueue, openText, closeText);
 		return doorPanelUI;
@@ -24,12 +23,10 @@ public class DoorPanel implements IDoorPanel {
 
 	@Override
 	public void setCar(ICar car) {
-		// TODO Auto-generated method stub
 		this.car = car;
 	}
 
 	public static void main(String args[]) {
-
 		IDoorPanel d = new DoorPanel();
 		ICar car = new Car();
 		ICarController c = new CarController();
@@ -53,7 +50,6 @@ public class DoorPanel implements IDoorPanel {
 		 * (InterruptedException e) { // TODO Auto-generated catch block
 		 * e.printStackTrace(); } }
 		 */
-
 	}
 
 	@Override

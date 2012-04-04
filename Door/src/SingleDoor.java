@@ -15,16 +15,13 @@ public class SingleDoor implements IDoor {
 		DoorThread doorThread = new DoorThread(this, "Close");
 		Thread thread = new Thread(doorThread);
 		thread.start();
-
 	}
 
 	@Override
 	public void openDoor() {
-
 		DoorThread doorThread = new DoorThread(this, "Open");
 		Thread thread = new Thread(doorThread);
 		thread.start();
-
 	}
 
 	/*
@@ -36,19 +33,16 @@ public class SingleDoor implements IDoor {
 	@Override
 	public void setCarController(ICarController carController) {
 		this.carController = carController;
-
 	}
 
 	@Override
 	public JPanel createDoorUI() {
-
 		singleDoorUI = new SingleDoorUI();
 		return singleDoorUI;
 	}
 
 	@Override
 	public String getDoorStatus() {
-		// TODO Auto-generated method stub
 		return doorStatus;
 	}
 
@@ -56,7 +50,6 @@ public class SingleDoor implements IDoor {
 	public void setDoorStatus(String doorStatus) {
 		this.doorStatus = doorStatus;
 		singleDoorUI.setDoorStatus(doorStatus);
-
 	}
 
 	public static void main(String[] args) {
@@ -74,12 +67,10 @@ public class SingleDoor implements IDoor {
 				e.printStackTrace();
 			}
 		}
-
 	}
 }
 
 class DoorThread implements Runnable {
-
 	IDoor door = null;
 
 	String command = null;
@@ -91,8 +82,8 @@ class DoorThread implements Runnable {
 
 	@Override
 	public void run() {
-
 		int i = 0;
+		
 		if (command.equalsIgnoreCase("Open")) {
 			synchronized (door) {
 				while (i < 5) {
@@ -101,18 +92,16 @@ class DoorThread implements Runnable {
 					try {
 						Thread.currentThread().sleep(2000);
 					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
+					
 					i = i + 2;
-
 				}
 
 				door.setDoorStatus("OPENED");
 				door.notifyAll();
 			}
 		} else {
-
 			synchronized (door) {
 				while (i < 5) {
 					System.out.println("i value" + i);
@@ -120,19 +109,15 @@ class DoorThread implements Runnable {
 					try {
 						Thread.currentThread().sleep(2000);
 					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
+					
 					i = i + 2;
-
 				}
 
 				door.setDoorStatus("CLOSED");
 				door.notifyAll();
 			}
-
 		}
-
 	}
-
 }

@@ -1,7 +1,6 @@
 import javax.swing.*;
 
 public interface IDoorPanel {
-
 	JPanel createDoorPanelUI();
 
 	void setCar(ICar car);
@@ -17,5 +16,4 @@ public interface IDoorPanel {
 	void setCloseText(String text);
 
 	void setOpenText(String text);
-
 }

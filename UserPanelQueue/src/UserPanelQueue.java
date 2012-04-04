@@ -16,15 +16,16 @@ public class UserPanelQueue implements IUserPanelQueue {
 
 	}
 
-	@Override
+	@SuppressWarnings("unchecked")
+	@Override 
 	public void putMessage(int destinationFloorNo) {
 		UserPanelRequest userPanelRequest = new UserPanelRequest(destinationFloorNo, car);
 
 		int currentFloorNumber = car.getCurrentFloorNumber();
 
 		if (!isRequestAlreadyQueued(userPanelRequest)) {
-
 			System.out.println("Current  " + currentFloorNumber);
+			
 			if (destinationFloorNo >= currenRequest) {
 				queueUserPanelRequestUp.offer(new UserPanelRequest(destinationFloorNo, car));
 				System.out.println("Request Queued Successfully in upQueue " + destinationFloorNo);
@@ -33,10 +34,13 @@ public class UserPanelQueue implements IUserPanelQueue {
 				System.out.println("Request Queued Successfully in downQueue " + destinationFloorNo);
 			}
 		}
+
 		System.out.println("Hellloooo.....sorting");
+
 		if (queueUserPanelRequestUp.size() != 0) {
 			Collections.sort(queueUserPanelRequestUp, UserPanelQueue.ASC_COMPARATOR);
 		}
+
 		if (queueUserPanelRequestDown.size() != 0) {
 			Collections.sort(queueUserPanelRequestDown, UserPanelQueue.DESC_COMPARATOR);
 		}
@@ -44,7 +48,6 @@ public class UserPanelQueue implements IUserPanelQueue {
 		for (UserPanelRequest u : queueUserPanelRequestUp) {
 			System.out.println("sandhyaaaaa" + u.getDestinationFloorNumber());
 		}
-
 	}
 
 	private boolean isRequestAlreadyQueued(UserPanelRequest userPanelRequest) {
@@ -54,8 +57,8 @@ public class UserPanelQueue implements IUserPanelQueue {
 		if (queueUserPanelRequestUp.contains(userPanelRequest) || queueUserPanelRequestDown.contains(userPanelRequest)) {
 			return true;
 		}
-		return false;
 
+		return false;
 	}
 
 	protected LinkedList<UserPanelRequest> getQueueUserPanelRequestUp() {
@@ -74,11 +77,9 @@ public class UserPanelQueue implements IUserPanelQueue {
 	}
 
 	public int pathLength(Direction direction, int destinationFloorNumber) {
-
 		int pathLength = 0;
 
 		if (direction.equals(Direction.UP)) {
-
 			if (queueUserPanelRequestUp.size() != 0) {
 				int firstRequest = car.getCurrentFloorNumber();
 
@@ -107,15 +108,15 @@ public class UserPanelQueue implements IUserPanelQueue {
 		}
 
 		return pathLength;
-
 	}
 
+	// This method is not testable since userPanelQueueMonitorThread is not
+	// accessible.
 	@Override
 	public void setCar(ICar car) {
 		this.car = car;
 		Thread userPanelQueueMonitorThread = new Thread(new UserPanelQueueMonitorThread());
 		userPanelQueueMonitorThread.start();
-
 	}
 
 	public ICar getCar() {
@@ -123,30 +124,24 @@ public class UserPanelQueue implements IUserPanelQueue {
 	}
 
 	class UserPanelQueueMonitorThread implements Runnable {
-
 		@Override
 		public void run() {
-			// TODO Auto-generated method stub
 			while (true) {
 				try {
 					Thread.sleep(5000);
-					/**
-					 * 10-23-2011 - Snigdha, code to stop car if alarm is
-					 * pressed
-					 **/
+
+					// Code to stop car if alarm is pressed.
 					if (car.getStatus().equals(CarStatus.ALARM_PRESSED)) {
 						break;
 					}
 
 					while (queueUserPanelRequestUp.size() != 0 || queueUserPanelRequestDown.size() != 0) {
 						while (queueUserPanelRequestUp.size() != 0) {
-
 							UserPanelRequest userPanelRequest = queueUserPanelRequestUp.pollFirst();
 							currenRequest = userPanelRequest.getDestinationFloorNumber();
 							System.out.println("Reading request from queueUp ...." + userPanelRequest.getDestinationFloorNumber());
 							ICarController carController = car.getCarController();
 							carController.processRequest(userPanelRequest.getDestinationFloorNumber(), Direction.UP);
-
 						}
 
 						while (queueUserPanelRequestDown.size() != 0) {
@@ -154,19 +149,14 @@ public class UserPanelQueue implements IUserPanelQueue {
 							System.out.println("Reading request from queueDown ...." + userPanelRequest.getDestinationFloorNumber());
 							ICarController carController = car.getCarController();
 							carController.processRequest(userPanelRequest.getDestinationFloorNumber(), Direction.DOWN);
-
 						}
-
 					}
 
 					car.setStatus(CarStatus.IDLE);
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
-
 		}
 	}
-
 }
