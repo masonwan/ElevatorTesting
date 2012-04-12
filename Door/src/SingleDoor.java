@@ -83,7 +83,7 @@ class DoorThread implements Runnable {
 	@Override
 	public void run() {
 		int i = 0;
-		
+
 		if (command.equalsIgnoreCase("Open")) {
 			synchronized (door) {
 				while (i < 5) {
@@ -92,9 +92,9 @@ class DoorThread implements Runnable {
 					try {
 						Thread.currentThread().sleep(500); // 2000
 					} catch (InterruptedException e) {
-						e.printStackTrace();
+						return; // e.printStackTrace();
 					}
-					
+
 					i = i + 2;
 				}
 
@@ -109,9 +109,9 @@ class DoorThread implements Runnable {
 					try {
 						Thread.currentThread().sleep(500); // 2000
 					} catch (InterruptedException e) {
-						e.printStackTrace();
+						return; // e.printStackTrace();
 					}
-					
+
 					i = i + 2;
 				}
 

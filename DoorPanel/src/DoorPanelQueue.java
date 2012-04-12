@@ -8,8 +8,9 @@ public class DoorPanelQueue {
 
 	public DoorPanelQueue(ICar car) {
 		this.car = car;
-		Thread doorPanelMonitorThread = new Thread(new DoorPanelQueueMonitorThread());
-		doorPanelMonitorThread.start();
+		// Thread doorPanelMonitorThread = new Thread(new
+		// DoorPanelQueueMonitorThread());
+		// doorPanelMonitorThread.start();
 	}
 
 	void putDoorPanelRequest(DoorCommand doorCommand) {
@@ -23,21 +24,22 @@ public class DoorPanelQueue {
 		this.car = car;
 	}
 
-	private class DoorPanelQueueMonitorThread implements Runnable {
+	class DoorPanelQueueMonitorThread implements Runnable {
 		@Override
 		public void run() {
-			while (true) {
-				try {
-					Thread.sleep(2000);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-				
-				while (doorPanelRequest.size() != 0) {
-					System.out.println("Processing request");
-					car.getCarController().processDoorRequest(doorPanelRequest.pop());
-				}
+			// while (true) {
+			try {
+				Thread.sleep(20); //2000
+			} catch (InterruptedException e) {
+				e.printStackTrace();
 			}
+
+			while (doorPanelRequest.size() != 0) {
+				System.out.println("Processing request");
+				car.getCarController().processDoorRequest(
+						doorPanelRequest.pop());
+			}
+			// }
 		}
 	}
 }
