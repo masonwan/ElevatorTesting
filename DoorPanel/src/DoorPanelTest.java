@@ -20,11 +20,15 @@ public class DoorPanelTest {
 
 	@Test
 	public void WB_DP_01() {
-		DoorPanelQueue dpq = new DoorPanelQueue(new Car());
+		DoorPanelQueue dpq = new DoorPanelQueue();
 		Assert.assertEquals(0, dpq.doorPanelRequest.size());
 		DoorPanelQueue.DoorPanelQueueMonitorThread th = new DoorPanelQueue(
 				new Car()).new DoorPanelQueueMonitorThread();
-		th.run();
+		// th.run();
+		Thread thread = new Thread(th);
+		thread.start();
+		sleep(1000);
+		thread.interrupt();
 		Assert.assertEquals(0, dpq.doorPanelRequest.size());
 	}
 
@@ -38,17 +42,22 @@ public class DoorPanelTest {
 	public void WB_DP_02() {
 		ICar car = new Car();
 		car.setCarController(new DisabledCarController());
-		DoorPanelQueue dpq = new DoorPanelQueue(car);
+		DoorPanelQueue dpq = new DoorPanelQueue();
+		dpq.car = car;
 		dpq.doorPanelRequest.add(DoorCommand.CLOSE);
 		Assert.assertEquals(1, dpq.doorPanelRequest.size());
 		DoorPanelQueue.DoorPanelQueueMonitorThread th = dpq.new DoorPanelQueueMonitorThread();
-		th.run();
+		// th.run();
+		Thread thread = new Thread(th);
+		thread.start();
+		sleep(1000);
+		thread.interrupt();
 		Assert.assertEquals(0, dpq.doorPanelRequest.size());
 	}
 
 	@Test
 	public void WB_DP_03() {
-		DoorPanelQueue dpq = new DoorPanelQueue(new Car());
+		DoorPanelQueue dpq = new DoorPanelQueue();
 		dpq.doorPanelRequest.add(DoorCommand.CLOSE);
 		Assert.assertEquals(1, dpq.doorPanelRequest.size());
 		dpq.putDoorPanelRequest(DoorCommand.CLOSE);
@@ -58,7 +67,7 @@ public class DoorPanelTest {
 
 	@Test
 	public void WB_DP_04() {
-		DoorPanelQueue dpq = new DoorPanelQueue(new Car());
+		DoorPanelQueue dpq = new DoorPanelQueue();
 		dpq.doorPanelRequest.add(DoorCommand.OPEN);
 		Assert.assertEquals(1, dpq.doorPanelRequest.size());
 		dpq.putDoorPanelRequest(DoorCommand.CLOSE);

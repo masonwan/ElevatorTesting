@@ -101,8 +101,7 @@ class DoorThread1 implements Runnable {
 					try {
 						Thread.currentThread().sleep(500); // 2000
 					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						return; // e.printStackTrace();
 					}
 					i = i + 2;
 
@@ -120,8 +119,7 @@ class DoorThread1 implements Runnable {
 					try {
 						Thread.currentThread().sleep(500); // 2000
 					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						return; // e.printStackTrace();
 					}
 					i = i + 2;
 
