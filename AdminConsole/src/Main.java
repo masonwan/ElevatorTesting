@@ -23,8 +23,8 @@ public class Main {
 
 		UserPanelConfiguration.setButtonColor(UserPanelColor.BLUE);
 
-		int numberOfFloors = 8;
-		int numberOfCars = 5;
+		int numberOfFloors = 8; // 8
+		int numberOfCars = 4; // 5;
 
 		JPanel completeFloorPanel = new JPanel();
 		completeFloorPanel.setLayout(new GridBagLayout());
@@ -33,7 +33,8 @@ public class Main {
 		gbc.gridx = 0;
 		gbc.gridy = centerrow;
 
-		IMetaController metaController = MetaControllerFactory.getMetaControllerInstance();
+		IMetaController metaController = MetaControllerFactory
+				.getMetaControllerInstance();
 
 		IFloorPanelQueue floorPanelQueue = new FloorPanelQueue();
 
@@ -99,7 +100,7 @@ public class Main {
 
 			frame.add(car.createCar());
 		}
-		frame.setSize(300 * numberOfCars, numberOfFloors * 80);
+		frame.setSize(235 * numberOfCars + 450, numberOfFloors * 85 + 50);
 		frame.setVisible(true);
 
 		// car[0].moveUp(9);

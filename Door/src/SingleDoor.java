@@ -90,7 +90,7 @@ class DoorThread implements Runnable {
 					System.out.println("i value" + i);
 					door.setDoorStatus("OPENING");
 					try {
-						Thread.currentThread().sleep(2000);
+						Thread.currentThread().sleep(500); // 2000
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
@@ -107,7 +107,7 @@ class DoorThread implements Runnable {
 					System.out.println("i value" + i);
 					door.setDoorStatus("CLOSING");
 					try {
-						Thread.currentThread().sleep(2000);
+						Thread.currentThread().sleep(500); // 2000
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
