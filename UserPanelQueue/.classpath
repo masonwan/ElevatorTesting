@@ -2,8 +2,12 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Jars"/>
-	<classpathentry kind="lib" path="/Car/bin"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="lib" path="/CarController/bin"/>
+	<classpathentry kind="lib" path="/Car/bin" sourcepath="/Car/src"/>
+	<classpathentry kind="lib" path="/Door/bin"/>
+	<classpathentry kind="lib" path="/DoorPanel/bin" sourcepath="/DoorPanel/src"/>
+	<classpathentry kind="lib" path="/FloorPanel/bin"/>
+	<classpathentry kind="lib" path="/UserPanel/bin"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

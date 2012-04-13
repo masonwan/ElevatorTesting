@@ -4,7 +4,7 @@ import java.util.*;
 
 import org.junit.*;
 
-public class testUserPanelRequestAscComparator {
+public class TestUserPanelRequestAscComparator {
 	Car car = new Car();
 
 	@Test

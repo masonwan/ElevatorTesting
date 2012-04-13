@@ -3,8 +3,9 @@ import static org.junit.Assert.*;
 import java.util.*;
 
 import org.junit.*;
+import org.junit.rules.*;
 
-public class testUserPanelQueue {
+public class TestUserPanelQueue {
 
 	@Before
 	public void setUp() throws Exception {
@@ -291,48 +292,49 @@ public class testUserPanelQueue {
 
 		UserPanelQueue.UserPanelQueueMonitorThread thread = data.queue.new UserPanelQueueMonitorThread();
 		thread.run();
-		
-		assertEquals(0, data.car.getDestinationFloor());
+
+		assertEquals(false, data.controller.isUp || data.controller.isDown);
+		assertNotSame(CarStatus.IDLE, data.car.status);
 	}
 
 	@Test
 	public void BP_16() {
 		TestData data = new TestData();
-		data.car.setStatus(CarStatus.MOVING_UP);
 
 		UserPanelQueue.UserPanelQueueMonitorThread thread = data.queue.new UserPanelQueueMonitorThread();
 		thread.run();
-		
-		assertEquals(0, data.car.getDestinationFloor());
+
+		assertEquals(false, data.controller.isUp);
+		assertEquals(false, data.controller.isDown);
 		assertEquals(CarStatus.IDLE, data.car.status);
 	}
 
 	@Test
 	public void BP_18() {
 		TestData data = new TestData();
-		data.car.setStatus(CarStatus.MOVING_UP);
 		data.upList.add(new UserPanelRequest(3, data.car));
 
 		UserPanelQueue.UserPanelQueueMonitorThread thread = data.queue.new UserPanelQueueMonitorThread();
 		thread.run();
-		
-		assertEquals(0, data.car.getDestinationFloor());
-		assertEquals(CarStatus.MOVING_UP, data.car.status);
+
+		assertEquals(true, data.controller.isUp);
+		assertEquals(false, data.controller.isDown);
+		assertEquals(CarStatus.IDLE, data.car.status);
 	}
 
-//	@Test
-//	public void BP_19() {
-//		TestData data = new TestData();
-//		data.car.setStatus(CarStatus.MOVING_DOWN);
-//		data.car.setCurrentFloorNumber(5);
-//		data.downList.add(new UserPanelRequest(3, data.car));
-//
-//		UserPanelQueue.UserPanelQueueMonitorThread thread = data.queue.new UserPanelQueueMonitorThread();
-//		thread.run();
-//		
-//		assertEquals(0, data.car.getDestinationFloor());
-//		assertEquals(CarStatus.MOVING_DOWN, data.car.status);
-//	}
+	@Test
+	public void BP_19() {
+		TestData data = new TestData();
+		data.car.setCurrentFloorNumber(2);
+		data.downList.add(new UserPanelRequest(1, data.car));
+
+		UserPanelQueue.UserPanelQueueMonitorThread thread = data.queue.new UserPanelQueueMonitorThread();
+		thread.run();
+
+		assertEquals(false, data.controller.isUp);
+		assertEquals(true, data.controller.isDown);
+		assertEquals(CarStatus.IDLE, data.car.status);
+	}
 
 	@Test
 	public void BP_20() {
@@ -403,24 +405,131 @@ public class testUserPanelQueue {
 		UserPanelRequest request2 = new UserPanelRequest(3, data.car);
 		assertEquals(0, comparator.compare(request1, request2));
 	}
+
+	@Test
+	public void CP_1() {
+		TestData data = new TestData();
+		boolean hasException = false;
+
+		try {
+			data.queue.putMessage(-1);
+		} catch (IllegalArgumentException e) {
+			hasException = true;
+		}
+
+		assertTrue(hasException);
+	}
+
+	@Test
+	public void CP_2() {
+		TestData data = new TestData();
+
+		data.queue.putMessage(1);
+
+		assertTrue(data.upList.size() + data.downList.size() == 1);
+	}
+
+	@Test
+	public void CP_3() {
+		TestData data = new TestData();
+		assertFalse(data.queue.isRequestAlreadyQueued(null));
+	}
+
+	@Test
+	public void CP_4() {
+		TestData data = new TestData();
+		data.upList.add(new UserPanelRequest(1, data.car));
+		assertTrue(data.queue.isRequestAlreadyQueued(new UserPanelRequest(1, data.car)));
+	}
+
+	@Test
+	public void CP_5() {
+		TestData data = new TestData();
+		data.downList.add(new UserPanelRequest(2, data.car));
+		assertTrue(data.queue.isRequestAlreadyQueued(new UserPanelRequest(2, data.car)));
+	}
+
+	@Test
+	public void CP_6() {
+		TestData data = new TestData();
+		assertFalse(data.queue.isRequestAlreadyQueued(new UserPanelRequest(1, data.car)));
+	}
+
+	@Test
+	public void CP_7() {
+		TestData data = new TestData();
+		boolean hasException = false;
+
+		try {
+			data.queue.pathLength(Direction.UP, -1);
+		} catch (IllegalArgumentException e) {
+			hasException = true;
+		}
+
+		assertTrue(hasException);		
+	}
+
+	@Test
+	public void CP_8() {
+		TestData data = new TestData();
+		data.car.currentFloorNumber = 2;
+		data.upList.add(new UserPanelRequest(3, data.car));
+		assertEquals(3, data.queue.pathLength(Direction.UP, 1));
+	}
+
+	@Test
+	public void CP_9() {
+		TestData data = new TestData();
+		data.car.currentFloorNumber = 2;
+		assertEquals(0, data.queue.pathLength(Direction.UP, 2));
+	}
+
+	@Test
+	public void CP_10() {
+		TestData data = new TestData();
+		data.car.currentFloorNumber = 2;
+		assertEquals(1, data.queue.pathLength(Direction.UP, 3));
+	}
+
+	@Test
+	public void CP_11() {
+		TestData data = new TestData();
+		data.car.currentFloorNumber = 2;
+		assertEquals(1, data.queue.pathLength(Direction.DOWN, 1));
+	}
+
+	@Test
+	public void CP_12() {
+		TestData data = new TestData();
+		data.car.currentFloorNumber = 2;
+		assertEquals(0, data.queue.pathLength(Direction.DOWN, 2));
+	}
+
+	@Test
+	public void CP_13() {
+		TestData data = new TestData();
+		data.car.currentFloorNumber = 2;
+		data.downList.add(new UserPanelRequest(1, data.car));
+		assertEquals(3, data.queue.pathLength(Direction.DOWN, 3));
+	}
 }
 
 class TestData {
-	public UserPanelQueue queue = new UserPanelQueue();
+	public TestedUserPanelQueue queue = new TestedUserPanelQueue();
 	public LinkedList<UserPanelRequest> upList = queue.getQueueUserPanelRequestUp();
 	public LinkedList<UserPanelRequest> downList = queue.getQueueUserPanelRequestDown();
-	public CarController controller = new CarController();
+	public TestedCarController controller = new TestedCarController();
 	public Car car = new Car();
 	public IDoor door = new SingleDoor();
-	public FloorPanel floorPanel = new FloorPanel();
-	public UserPanel userPanel = new UserPanel();
+
+	// public FloorPanel floorPanel = new FloorPanel();
+	// public UserPanel userPanel = new UserPanel();
 
 	public TestData() {
-		queue = new UserPanelQueue();
+		queue = new TestedUserPanelQueue();
 		upList = queue.getQueueUserPanelRequestUp();
 		downList = queue.getQueueUserPanelRequestDown();
-		controller = new CarController();
-		car = new Car();
+		car = new Car(false);
 
 		car.setCarController(controller);
 
@@ -431,16 +540,44 @@ class TestData {
 		door = new SingleDoor();
 		door.setCarController(controller);
 
-		userPanel = new UserPanel();
-		userPanel.setCar(car);
-		userPanel.createUserPanel();
+		// userPanel = new UserPanel();
+		// userPanel.setCar(car);
+		// userPanel.createUserPanel();
+		//
+		// floorPanel = new FloorPanel();
+		// floorPanel.setButtonColor(FloorPanelColor.BLUE);
+		// floorPanel.createFloorPanel(1);
 
-		floorPanel = new FloorPanel();
-		floorPanel.setButtonColor(FloorPanelColor.BLUE);
-		floorPanel.createFloorPanel(1);
+		// car.setDoor(door);
+		// car.setUserPanel(userPanel);
+		// controller.setFloorPanel(floorPanel);
+	}
+}
 
-		car.setDoor(door);
-		car.setUserPanel(userPanel);
-		controller.setFloorPanel(floorPanel);
+class TestedUserPanelQueue extends UserPanelQueue {
+	Thread userPanelQueueMonitorThread = null;
+
+	@Override
+	public void setCar(ICar car) {
+		this.car = car;
+	}
+
+	public void runThead() {
+		userPanelQueueMonitorThread = new Thread(new UserPanelQueueMonitorThread());
+		userPanelQueueMonitorThread.start();
+	}
+}
+
+class TestedCarController extends CarController {
+	boolean isUp = false;
+	boolean isDown = false;
+
+	@Override
+	public void processRequest(int destinationFloorNumber, Direction direction) {
+		if (direction == Direction.UP) {
+			isUp = true;
+		} else if (direction == Direction.DOWN) {
+			isDown = true;
+		}
 	}
 }

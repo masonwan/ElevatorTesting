@@ -35,6 +35,9 @@ public class Car implements ICar {
 		carThread = new Thread(carRunnable);
 	}
 
+	public Car(boolean b) {
+	}
+
 	public int getCarID() {
 		return carID;
 	}
@@ -203,7 +206,6 @@ class CarRunnable implements Runnable {
 	}
 
 	public CarRunnable() {
-
 	}
 
 	public CarRunnable(ICar car, int destinationFloorNumber) {
@@ -232,7 +234,7 @@ class CarRunnable implements Runnable {
 						break;
 					car.setCurrentFloorNumber(car.getCurrentFloorNumber() + 1);
 				}
-				/** 10/23/2011 - Snigdha, Check for alarm pressed status added **/
+				/** Check for alarm pressed status added **/
 				if (car.getStatus() != CarStatus.ALARM_PRESSED) {
 					car.setStatus(CarStatus.STOPPED);
 

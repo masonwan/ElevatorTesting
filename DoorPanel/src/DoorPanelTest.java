@@ -2,6 +2,7 @@ import static org.junit.Assert.*;
 
 import java.awt.Color;
 import java.io.*;
+import java.lang.Thread.*;
 
 import junit.framework.Assert;
 
@@ -83,7 +84,7 @@ public class DoorPanelTest {
 		DoorThread doorThread = new DoorThread(door, "Open");
 		Thread thread = new Thread(doorThread);
 		thread.start();
-		sleep(1);
+		sleep(100);
 		thread.interrupt();
 		Assert.assertEquals("OPENING", door.getDoorStatus());
 	}
@@ -106,7 +107,7 @@ public class DoorPanelTest {
 		DoorThread doorThread = new DoorThread(door, "Close");
 		Thread thread = new Thread(doorThread);
 		thread.start();
-		sleep(1);
+		sleep(100);
 		thread.interrupt();
 		Assert.assertEquals("CLOSING", door.getDoorStatus());
 	}
@@ -144,7 +145,7 @@ public class DoorPanelTest {
 		DoorThread doorThread = new DoorThread(door, "Open");
 		Thread thread = new Thread(doorThread);
 		thread.start();
-		sleep(1);
+		sleep(100);
 		thread.interrupt();
 		Assert.assertEquals("OPENING", door.getDoorStatus());
 	}
@@ -167,7 +168,7 @@ public class DoorPanelTest {
 		DoorThread doorThread = new DoorThread(door, "Close");
 		Thread thread = new Thread(doorThread);
 		thread.start();
-		sleep(1);
+		sleep(100);
 		thread.interrupt();
 		Assert.assertEquals("CLOSING", door.getDoorStatus());
 	}

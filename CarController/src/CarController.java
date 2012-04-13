@@ -19,7 +19,6 @@ public class CarController implements ICarController {
 			try {
 				Thread.currentThread().sleep(2000);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -27,11 +26,10 @@ public class CarController implements ICarController {
 		if (direction.equals(Direction.UP)) {
 			synchronized (car) {
 				car.moveUp(destinationFloorNumber);
-				
+
 				try {
 					car.wait();
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -40,27 +38,25 @@ public class CarController implements ICarController {
 		if (direction.equals(Direction.DOWN)) {
 			synchronized (car) {
 				car.moveDown(destinationFloorNumber);
-				
+
 				try {
 					car.wait();
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
 		}
-		
+
 		car.getUserPanel().deactivateFloorButton(destinationFloorNumber);
 		floorPanel.processedRequest(destinationFloorNumber);
 		processDoorRequest(DoorCommand.OPEN);
-		
+
 		try {
 			Thread.currentThread().sleep(2000);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		processDoorRequest(DoorCommand.CLOSE);
 	}
 

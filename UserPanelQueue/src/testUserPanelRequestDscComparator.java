@@ -2,7 +2,7 @@ import static org.junit.Assert.*;
 
 import org.junit.*;
 
-public class testUserPanelRequestDscComparator {
+public class TestUserPanelRequestDscComparator {
 	Car car = new Car();
 
 	@Test
