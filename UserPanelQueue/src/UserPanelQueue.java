@@ -1,23 +1,39 @@
 import java.util.*;
 
 public class UserPanelQueue implements IUserPanelQueue {
-
-	protected LinkedList<UserPanelRequest> queueUserPanelRequestUp = new LinkedList<UserPanelRequest>();
-	protected LinkedList<UserPanelRequest> queueUserPanelRequestDown = new LinkedList<UserPanelRequest>();
-
 	protected final static UserPanelRequestAscComparator ASC_COMPARATOR = new UserPanelRequestAscComparator();
 	protected final static UserPanelRequestDescComparator DESC_COMPARATOR = new UserPanelRequestDescComparator();
 
+	protected LinkedList<UserPanelRequest> queueUserPanelRequestUp = new LinkedList<UserPanelRequest>();
+
+	protected LinkedList<UserPanelRequest> queueUserPanelRequestDown = new LinkedList<UserPanelRequest>();
+
+	protected LinkedList<UserPanelRequest> getQueueUserPanelRequestUp() {
+		return queueUserPanelRequestUp;
+	}
+
+	protected LinkedList<UserPanelRequest> getQueueUserPanelRequestDown() {
+		return queueUserPanelRequestDown;
+	}
+
 	private ICar car = null;
 
-	protected int currenRequest = 1;
+	protected int currentRequestedFloor = 1;
+
+	public void setCurrentRequestedFloor(int floor) {
+		currentRequestedFloor = floor;
+	}
+
+	public int getCurrentRequestedFloor() {
+		return currentRequestedFloor;
+	}
 
 	public UserPanelQueue() {
 
 	}
 
 	@SuppressWarnings("unchecked")
-	@Override 
+	@Override
 	public void putMessage(int destinationFloorNo) {
 		UserPanelRequest userPanelRequest = new UserPanelRequest(destinationFloorNo, car);
 
@@ -25,8 +41,8 @@ public class UserPanelQueue implements IUserPanelQueue {
 
 		if (!isRequestAlreadyQueued(userPanelRequest)) {
 			System.out.println("Current  " + currentFloorNumber);
-			
-			if (destinationFloorNo >= currenRequest) {
+
+			if (destinationFloorNo >= currentRequestedFloor) {
 				queueUserPanelRequestUp.offer(new UserPanelRequest(destinationFloorNo, car));
 				System.out.println("Request Queued Successfully in upQueue " + destinationFloorNo);
 			} else {
@@ -50,7 +66,7 @@ public class UserPanelQueue implements IUserPanelQueue {
 		}
 	}
 
-	private boolean isRequestAlreadyQueued(UserPanelRequest userPanelRequest) {
+	public boolean isRequestAlreadyQueued(UserPanelRequest userPanelRequest) {
 		// check if request for the same floor and same car is already in
 		// the queue
 
@@ -59,14 +75,6 @@ public class UserPanelQueue implements IUserPanelQueue {
 		}
 
 		return false;
-	}
-
-	protected LinkedList<UserPanelRequest> getQueueUserPanelRequestUp() {
-		return queueUserPanelRequestUp;
-	}
-
-	protected LinkedList<UserPanelRequest> getQueueUserPanelRequestDown() {
-		return queueUserPanelRequestDown;
 	}
 
 	@Override
@@ -123,22 +131,24 @@ public class UserPanelQueue implements IUserPanelQueue {
 		return car;
 	}
 
-	class UserPanelQueueMonitorThread implements Runnable {
+	public class UserPanelQueueMonitorThread implements Runnable {
 		@Override
 		public void run() {
-			while (true) {
-				try {
-					Thread.sleep(5000);
+			// while (true)
+			{
+//				try {
+					// Thread.sleep(5000);
 
 					// Code to stop car if alarm is pressed.
 					if (car.getStatus().equals(CarStatus.ALARM_PRESSED)) {
-						break;
+						// break;
+						return;
 					}
 
 					while (queueUserPanelRequestUp.size() != 0 || queueUserPanelRequestDown.size() != 0) {
 						while (queueUserPanelRequestUp.size() != 0) {
 							UserPanelRequest userPanelRequest = queueUserPanelRequestUp.pollFirst();
-							currenRequest = userPanelRequest.getDestinationFloorNumber();
+							currentRequestedFloor = userPanelRequest.getDestinationFloorNumber();
 							System.out.println("Reading request from queueUp ...." + userPanelRequest.getDestinationFloorNumber());
 							ICarController carController = car.getCarController();
 							carController.processRequest(userPanelRequest.getDestinationFloorNumber(), Direction.UP);
@@ -153,9 +163,9 @@ public class UserPanelQueue implements IUserPanelQueue {
 					}
 
 					car.setStatus(CarStatus.IDLE);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
+//				} catch (InterruptedException e) {
+//					e.printStackTrace();
+//				}
 			}
 		}
 	}
