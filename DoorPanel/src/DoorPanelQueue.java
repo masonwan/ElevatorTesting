@@ -6,9 +6,13 @@ public class DoorPanelQueue {
 
 	LinkedList<DoorCommand> doorPanelRequest = new LinkedList<DoorCommand>();
 
+	public DoorPanelQueue() { // add for testing avoid run thread
+	}
+
 	public DoorPanelQueue(ICar car) {
 		this.car = car;
-		Thread doorPanelMonitorThread = new Thread(new DoorPanelQueueMonitorThread());
+		Thread doorPanelMonitorThread = new Thread(
+				new DoorPanelQueueMonitorThread());
 		doorPanelMonitorThread.start();
 	}
 
@@ -23,19 +27,20 @@ public class DoorPanelQueue {
 		this.car = car;
 	}
 
-	private class DoorPanelQueueMonitorThread implements Runnable {
+	class DoorPanelQueueMonitorThread implements Runnable {
 		@Override
 		public void run() {
 			while (true) {
 				try {
-					Thread.sleep(2000);
+					Thread.sleep(500); // 2000
 				} catch (InterruptedException e) {
-					e.printStackTrace();
+					// e.printStackTrace();
 				}
-				
+
 				while (doorPanelRequest.size() != 0) {
 					System.out.println("Processing request");
-					car.getCarController().processDoorRequest(doorPanelRequest.pop());
+					car.getCarController().processDoorRequest(
+							doorPanelRequest.pop());
 				}
 			}
 		}

@@ -1,103 +1,200 @@
 import static org.junit.Assert.*;
 
-import java.awt.*;
+import java.awt.Color;
+import java.io.*;
 
-import javax.swing.*;
+import junit.framework.Assert;
 
 import org.junit.Test;
 
 public class DoorPanelTest {
+	PrintStream orgOut;
 
-	// @Test
-	// public void test() {
-	// IDoorPanel d = new DoorPanel();
-	// ICar car = new Car();
-	// ICarController c = new CarController();
-	// IDoor door = new SingleDoor();
-	//
-	// car.setCarController(c);
-	// car.setDoorPanel(d);
-	// car.setDoor(door);
-	//
-	// d.setCar(car);
-	// d.setCloseText("close");
-	// d.setOpenText("open");
-	//
-	// c.setCar(car);
-	//
-	// JFrame j = new JFrame();
-	// j.setLayout(new FlowLayout());
-	// j.add(d.createDoorPanelUI());
-	// j.add(door.createDoorUI());
-	// j.setVisible(true);
-	//
-	// }
-
-	// public void test_err_1() {
-	// IDoorPanel d = new DoorPanel();
-	// IDoor door = new SingleDoor();
-	// d.setCloseText("close");
-	// d.setOpenText("open");
-	// JFrame j = new JFrame();
-	// j.setLayout(new FlowLayout());
-	// j.add(d.createDoorPanelUI());
-	// j.add(door.createDoorUI());
-	// j.setVisible(true);
-	// }
-	//
-	// public void test_err_2() {
-	// IDoorPanel d = new DoorPanel();
-	// ICar car = new Car();
-	// ICarController c = new CarController();
-	// IDoor door = new SingleDoor();
-	//
-	// car.setCarController(c);
-	// car.setDoorPanel(d);
-	// // car.setDoor(door);
-	//
-	// d.setCar(car);
-	// d.setCloseText("close");
-	// d.setOpenText("open");
-	//
-	// c.setCar(car);
-	//
-	// JFrame j = new JFrame();
-	// j.setLayout(new FlowLayout());
-	// j.add(d.createDoorPanelUI());
-	// j.add(door.createDoorUI());
-	// j.setVisible(true);
-	//
-	// }
-
-	public void test() {
-		IDoorPanel d = new DoorPanel();
-		ICar car = new Car();
-		ICarController c = new CarController();
-		IDoor door = new SingleDoor();
-
-		car.setCarController(c);
-		car.setDoorPanel(d);
-		car.setDoor(door);
-		// car.setStatus(CarStatus.IDLE);
-
-		d.setCar(car);
-
-		d.setCloseText("Close");
-		d.setOpenText("Open");
-
-		c.setCar(car);
-
-		JFrame j = new JFrame();
-		j.setLayout(new FlowLayout());
-		j.add(d.createDoorPanelUI());
-		j.add(door.createDoorUI());
-		j.setVisible(true);
-
-		// door.setDoorStatus("TEST");
+	void sleep(long ms) {
+		try {
+			Thread.sleep(ms);
+		} catch (InterruptedException e) {
+			// e.printStackTrace();
+		}
 	}
 
-	public static void main(String args[]) {
-		DoorPanelTest test = new DoorPanelTest();
-		test.test();
+	@Test
+	public void WB_DP_01() {
+		DoorPanelQueue dpq = new DoorPanelQueue();
+		Assert.assertEquals(0, dpq.doorPanelRequest.size());
+		DoorPanelQueue.DoorPanelQueueMonitorThread th = new DoorPanelQueue(
+				new Car()).new DoorPanelQueueMonitorThread();
+		// th.run();
+		Thread thread = new Thread(th);
+		thread.start();
+		sleep(1000);
+		thread.interrupt();
+		Assert.assertEquals(0, dpq.doorPanelRequest.size());
+	}
+
+	class DisabledCarController extends CarController {
+		@Override
+		public void processDoorRequest(DoorCommand arg0) {
+		}
+	}
+
+	@Test
+	public void WB_DP_02() {
+		ICar car = new Car();
+		car.setCarController(new DisabledCarController());
+		DoorPanelQueue dpq = new DoorPanelQueue();
+		dpq.car = car;
+		dpq.doorPanelRequest.add(DoorCommand.CLOSE);
+		Assert.assertEquals(1, dpq.doorPanelRequest.size());
+		DoorPanelQueue.DoorPanelQueueMonitorThread th = dpq.new DoorPanelQueueMonitorThread();
+		// th.run();
+		Thread thread = new Thread(th);
+		thread.start();
+		sleep(1000);
+		thread.interrupt();
+		Assert.assertEquals(0, dpq.doorPanelRequest.size());
+	}
+
+	@Test
+	public void WB_DP_03() {
+		DoorPanelQueue dpq = new DoorPanelQueue();
+		dpq.doorPanelRequest.add(DoorCommand.CLOSE);
+		Assert.assertEquals(1, dpq.doorPanelRequest.size());
+		dpq.putDoorPanelRequest(DoorCommand.CLOSE);
+		Assert.assertEquals(1, dpq.doorPanelRequest.size());
+		Assert.assertEquals(DoorCommand.CLOSE, dpq.doorPanelRequest.get(0));
+	}
+
+	@Test
+	public void WB_DP_04() {
+		DoorPanelQueue dpq = new DoorPanelQueue();
+		dpq.doorPanelRequest.add(DoorCommand.OPEN);
+		Assert.assertEquals(1, dpq.doorPanelRequest.size());
+		dpq.putDoorPanelRequest(DoorCommand.CLOSE);
+		Assert.assertEquals(2, dpq.doorPanelRequest.size());
+		Assert.assertEquals(DoorCommand.OPEN, dpq.doorPanelRequest.get(0));
+		Assert.assertEquals(DoorCommand.CLOSE, dpq.doorPanelRequest.get(1));
+	}
+
+	@Test
+	public void WB_DP_05() {
+		IDoor door = new SingleDoor();
+		door.createDoorUI();
+		DoorThread doorThread = new DoorThread(door, "Open");
+		Thread thread = new Thread(doorThread);
+		thread.start();
+		sleep(1);
+		thread.interrupt();
+		Assert.assertEquals("OPENING", door.getDoorStatus());
+	}
+
+	@Test
+	public void WB_DP_06() {
+		IDoor door = new SingleDoor();
+		door.createDoorUI();
+		Assert.assertFalse("OPENED".equals(door.getDoorStatus()));
+		DoorThread doorThread = new DoorThread(door, "Open");
+		doorThread.run();
+		Assert.assertEquals("OPENED", door.getDoorStatus());
+	}
+
+	@Test
+	public void WB_DP_07() {
+		IDoor door = new SingleDoor();
+		door.createDoorUI();
+		door.setDoorStatus("");
+		DoorThread doorThread = new DoorThread(door, "Close");
+		Thread thread = new Thread(doorThread);
+		thread.start();
+		sleep(1);
+		thread.interrupt();
+		Assert.assertEquals("CLOSING", door.getDoorStatus());
+	}
+
+	@Test
+	public void WB_DP_08() {
+		IDoor door = new SingleDoor();
+		door.createDoorUI();
+		door.setDoorStatus("");
+		DoorThread doorThread = new DoorThread(door, "Close");
+		doorThread.run();
+		Assert.assertEquals("CLOSED", door.getDoorStatus());
+	}
+
+	@Test
+	public void WB_DP_09() {
+		SingleDoorUI ui = new SingleDoorUI();
+		Assert.assertNotSame(Color.yellow, ui.textDoorStatus.getBackground());
+		ui.setDoorStatus("CLOSED");
+		Assert.assertNotSame(Color.yellow, ui.textDoorStatus.getBackground());
+	}
+
+	@Test
+	public void WB_DP_10() {
+		SingleDoorUI ui = new SingleDoorUI();
+		Assert.assertNotSame(Color.yellow, ui.textDoorStatus.getBackground());
+		ui.setDoorStatus("CLOSING");
+		Assert.assertEquals(Color.yellow, ui.textDoorStatus.getBackground());
+	}
+
+	@Test
+	public void WB_DP_11() {
+		IDoor door = new DoubleDoor();
+		door.createDoorUI();
+		DoorThread doorThread = new DoorThread(door, "Open");
+		Thread thread = new Thread(doorThread);
+		thread.start();
+		sleep(1);
+		thread.interrupt();
+		Assert.assertEquals("OPENING", door.getDoorStatus());
+	}
+
+	@Test
+	public void WB_DP_12() {
+		IDoor door = new DoubleDoor();
+		door.createDoorUI();
+		Assert.assertFalse("OPENED".equals(door.getDoorStatus()));
+		DoorThread doorThread = new DoorThread(door, "Open");
+		doorThread.run();
+		Assert.assertEquals("OPENED", door.getDoorStatus());
+	}
+
+	@Test
+	public void WB_DP_13() {
+		IDoor door = new DoubleDoor();
+		door.createDoorUI();
+		door.setDoorStatus("");
+		DoorThread doorThread = new DoorThread(door, "Close");
+		Thread thread = new Thread(doorThread);
+		thread.start();
+		sleep(1);
+		thread.interrupt();
+		Assert.assertEquals("CLOSING", door.getDoorStatus());
+	}
+
+	@Test
+	public void WB_DP_14() {
+		IDoor door = new DoubleDoor();
+		door.createDoorUI();
+		door.setDoorStatus("");
+		DoorThread doorThread = new DoorThread(door, "Close");
+		doorThread.run();
+		Assert.assertEquals("CLOSED", door.getDoorStatus());
+	}
+
+	@Test
+	public void WB_DP_15() {
+		DoubleDoorUI ui = new DoubleDoorUI();
+		Assert.assertNotSame(Color.yellow, ui.textDoorStatus.getBackground());
+		ui.setDoorStatus("CLOSED");
+		Assert.assertNotSame(Color.yellow, ui.textDoorStatus.getBackground());
+	}
+
+	@Test
+	public void WB_DP_16() {
+		DoubleDoorUI ui = new DoubleDoorUI();
+		Assert.assertNotSame(Color.yellow, ui.textDoorStatus.getBackground());
+		ui.setDoorStatus("CLOSING");
+		Assert.assertEquals(Color.yellow, ui.textDoorStatus.getBackground());
 	}
 }

@@ -99,10 +99,9 @@ class DoorThread1 implements Runnable {
 					System.out.println("i value" + i);
 					door.setDoorStatus("OPENING");
 					try {
-						Thread.currentThread().sleep(2000);
+						Thread.currentThread().sleep(500); // 2000
 					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						return; // e.printStackTrace();
 					}
 					i = i + 2;
 
@@ -118,10 +117,9 @@ class DoorThread1 implements Runnable {
 					System.out.println("i value" + i);
 					door.setDoorStatus("CLOSING");
 					try {
-						Thread.currentThread().sleep(2000);
+						Thread.currentThread().sleep(500); // 2000
 					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						return; // e.printStackTrace();
 					}
 					i = i + 2;
 
