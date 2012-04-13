@@ -466,7 +466,7 @@ public class TestUserPanelQueue {
 			hasException = true;
 		}
 
-		assertTrue(hasException);		
+		assertTrue(hasException);
 	}
 
 	@Test
@@ -511,6 +511,117 @@ public class TestUserPanelQueue {
 		data.car.currentFloorNumber = 2;
 		data.downList.add(new UserPanelRequest(1, data.car));
 		assertEquals(3, data.queue.pathLength(Direction.DOWN, 3));
+	}
+
+	@Test
+	public void DT_1() {
+		TestData data = new TestData();
+
+		data.queue.setCurrentRequestedFloor(2);
+		data.queue.putMessage(1);
+
+		assertEquals(0, data.upList.size());
+		assertEquals(1, data.downList.size());
+	}
+
+	@Test
+	public void DT_2() {
+		TestData data = new TestData();
+
+		data.queue.setCurrentRequestedFloor(2);
+		data.queue.putMessage(2);
+
+		assertEquals(1, data.upList.size());
+		assertEquals(0, data.downList.size());
+	}
+
+	@Test
+	public void DT_3() {
+		TestData data = new TestData();
+
+		data.upList.add(new UserPanelRequest(1, data.car));
+		data.queue.putMessage(1);
+
+		assertEquals(1, data.upList.size());
+		assertEquals(0, data.downList.size());
+	}
+
+	@Test
+	public void DT_4() {
+		TestData data = new TestData();
+		data.upList.add(new UserPanelRequest(1, data.car));
+		data.downList.add(new UserPanelRequest(2, data.car));
+		assertFalse(data.queue.isRequestAlreadyQueued(new UserPanelRequest(3, data.car)));
+	}
+
+	@Test
+	public void DT_5() {
+		TestData data = new TestData();
+		data.upList.add(new UserPanelRequest(1, data.car));
+		data.downList.add(new UserPanelRequest(2, data.car));
+		assertTrue(data.queue.isRequestAlreadyQueued(new UserPanelRequest(2, data.car)));
+	}
+
+	@Test
+	public void DT_6() {
+		TestData data = new TestData();
+		data.upList.add(new UserPanelRequest(1, data.car));
+		data.downList.add(new UserPanelRequest(2, data.car));
+		assertTrue(data.queue.isRequestAlreadyQueued(new UserPanelRequest(1, data.car)));
+	}
+
+	@Test
+	public void DT_7() {
+		TestData data = new TestData();
+		data.upList.add(new UserPanelRequest(1, data.car));
+		data.downList.add(new UserPanelRequest(1, data.car));
+		assertTrue(data.queue.isRequestAlreadyQueued(new UserPanelRequest(1, data.car)));
+	}
+
+	@Test
+	public void DT_8() {
+		TestData data = new TestData();
+		data.downList.add(new UserPanelRequest(1, data.car));
+		data.car.currentFloorNumber = 2;
+		assertEquals(3, data.queue.pathLength(Direction.DOWN, 3));
+	}
+
+	@Test
+	public void DT_9() {
+		TestData data = new TestData();
+		data.upList.add(new UserPanelRequest(2, data.car));
+		data.car.currentFloorNumber = 1;
+		assertEquals(2, data.queue.pathLength(Direction.UP, 3));
+	}
+
+	@Test
+	public void DT_10() {
+		TestData data = new TestData();
+		data.car.currentFloorNumber = 1;
+		assertEquals(1, data.queue.pathLength(Direction.UP, 2));
+	}
+
+	@Test
+	public void DT_11() {
+		TestData data = new TestData();
+		data.upList.add(new UserPanelRequest(3, data.car));
+		data.car.currentFloorNumber = 2;
+		assertEquals(3, data.queue.pathLength(Direction.UP, 1));
+	}
+
+	@Test
+	public void DT_12() {
+		TestData data = new TestData();
+		data.downList.add(new UserPanelRequest(2, data.car));
+		data.car.currentFloorNumber = 3;
+		assertEquals(2, data.queue.pathLength(Direction.DOWN, 1));
+	}
+
+	@Test
+	public void DT_13() {
+		TestData data = new TestData();
+		data.car.currentFloorNumber = 2;
+		assertEquals(1, data.queue.pathLength(Direction.DOWN, 1));
 	}
 }
 
