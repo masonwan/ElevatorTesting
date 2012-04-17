@@ -17,7 +17,7 @@ public class CarController implements ICarController {
 			processDoorRequest(DoorCommand.CLOSE);
 
 			try {
-				Thread.currentThread().sleep(2000);
+				Thread.sleep(500); // 2000
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -52,7 +52,7 @@ public class CarController implements ICarController {
 		processDoorRequest(DoorCommand.OPEN);
 
 		try {
-			Thread.currentThread().sleep(2000);
+			Thread.sleep(500); // 2000
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -74,7 +74,10 @@ public class CarController implements ICarController {
 		door = car.getDoor();
 		IDoorPanel doorPanel = car.getDoorPanel();
 		if (doorCommand.equals(DoorCommand.OPEN)) {
-			if ((car.getStatus().equals(CarStatus.STOPPED) || car.getStatus().equals(CarStatus.IDLE)) && !car.getDoor().getDoorStatus().equalsIgnoreCase("Opened")) {
+			if ((car.getStatus().equals(CarStatus.STOPPED) || car.getStatus()
+					.equals(CarStatus.IDLE))
+					&& !car.getDoor().getDoorStatus()
+							.equalsIgnoreCase("Opened")) {
 
 				doorPanel.activateOpenButton();
 				synchronized (door) {
@@ -95,7 +98,10 @@ public class CarController implements ICarController {
 			}
 
 		} else {
-			if ((car.getStatus().equals(CarStatus.STOPPED) || car.getStatus().equals(CarStatus.IDLE)) && !car.getDoor().getDoorStatus().equalsIgnoreCase("Closed")) {
+			if ((car.getStatus().equals(CarStatus.STOPPED) || car.getStatus()
+					.equals(CarStatus.IDLE))
+					&& !car.getDoor().getDoorStatus()
+							.equalsIgnoreCase("Closed")) {
 
 				doorPanel.activateCloseButton();
 				synchronized (door) {

@@ -35,7 +35,8 @@ public class UserPanelQueue implements IUserPanelQueue {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void putMessage(int destinationFloorNo) {
-		UserPanelRequest userPanelRequest = new UserPanelRequest(destinationFloorNo, car);
+		UserPanelRequest userPanelRequest = new UserPanelRequest(
+				destinationFloorNo, car);
 
 		int currentFloorNumber = car.getCurrentFloorNumber();
 
@@ -43,22 +44,28 @@ public class UserPanelQueue implements IUserPanelQueue {
 			System.out.println("Current  " + currentFloorNumber);
 
 			if (destinationFloorNo >= currentRequestedFloor) {
-				queueUserPanelRequestUp.offer(new UserPanelRequest(destinationFloorNo, car));
-				System.out.println("Request Queued Successfully in upQueue " + destinationFloorNo);
+				queueUserPanelRequestUp.offer(new UserPanelRequest(
+						destinationFloorNo, car));
+				System.out.println("Request Queued Successfully in upQueue "
+						+ destinationFloorNo);
 			} else {
-				queueUserPanelRequestDown.offer(new UserPanelRequest(destinationFloorNo, car));
-				System.out.println("Request Queued Successfully in downQueue " + destinationFloorNo);
+				queueUserPanelRequestDown.offer(new UserPanelRequest(
+						destinationFloorNo, car));
+				System.out.println("Request Queued Successfully in downQueue "
+						+ destinationFloorNo);
 			}
 		}
 
 		System.out.println("Hellloooo.....sorting");
 
 		if (queueUserPanelRequestUp.size() != 0) {
-			Collections.sort(queueUserPanelRequestUp, UserPanelQueue.ASC_COMPARATOR);
+			Collections.sort(queueUserPanelRequestUp,
+					UserPanelQueue.ASC_COMPARATOR);
 		}
 
 		if (queueUserPanelRequestDown.size() != 0) {
-			Collections.sort(queueUserPanelRequestDown, UserPanelQueue.DESC_COMPARATOR);
+			Collections.sort(queueUserPanelRequestDown,
+					UserPanelQueue.DESC_COMPARATOR);
 		}
 
 		for (UserPanelRequest u : queueUserPanelRequestUp) {
@@ -70,7 +77,8 @@ public class UserPanelQueue implements IUserPanelQueue {
 		// check if request for the same floor and same car is already in
 		// the queue
 
-		if (queueUserPanelRequestUp.contains(userPanelRequest) || queueUserPanelRequestDown.contains(userPanelRequest)) {
+		if (queueUserPanelRequestUp.contains(userPanelRequest)
+				|| queueUserPanelRequestDown.contains(userPanelRequest)) {
 			return true;
 		}
 
@@ -94,11 +102,14 @@ public class UserPanelQueue implements IUserPanelQueue {
 				if (firstRequest <= destinationFloorNumber) {
 					pathLength = destinationFloorNumber - firstRequest;
 				} else {
-					int lastRequest = queueUserPanelRequestUp.getLast().getDestinationFloorNumber();
-					pathLength = (lastRequest - firstRequest) + (lastRequest - destinationFloorNumber);
+					int lastRequest = queueUserPanelRequestUp.getLast()
+							.getDestinationFloorNumber();
+					pathLength = (lastRequest - firstRequest)
+							+ (lastRequest - destinationFloorNumber);
 				}
 			} else {
-				pathLength = Math.abs(car.getCurrentFloorNumber() - destinationFloorNumber);
+				pathLength = Math.abs(car.getCurrentFloorNumber()
+						- destinationFloorNumber);
 			}
 		} else {
 			if (queueUserPanelRequestDown.size() != 0) {
@@ -107,11 +118,14 @@ public class UserPanelQueue implements IUserPanelQueue {
 				if (firstRequest >= destinationFloorNumber) {
 					pathLength = -destinationFloorNumber + firstRequest;
 				} else {
-					int lastRequest = queueUserPanelRequestDown.getLast().getDestinationFloorNumber();
-					pathLength = (-lastRequest + firstRequest) + (-lastRequest + destinationFloorNumber);
+					int lastRequest = queueUserPanelRequestDown.getLast()
+							.getDestinationFloorNumber();
+					pathLength = (-lastRequest + firstRequest)
+							+ (-lastRequest + destinationFloorNumber);
 				}
 			} else {
-				pathLength = Math.abs(car.getCurrentFloorNumber() - destinationFloorNumber);
+				pathLength = Math.abs(car.getCurrentFloorNumber()
+						- destinationFloorNumber);
 			}
 		}
 
@@ -123,7 +137,8 @@ public class UserPanelQueue implements IUserPanelQueue {
 	@Override
 	public void setCar(ICar car) {
 		this.car = car;
-		Thread userPanelQueueMonitorThread = new Thread(new UserPanelQueueMonitorThread());
+		Thread userPanelQueueMonitorThread = new Thread(
+				new UserPanelQueueMonitorThread());
 		userPanelQueueMonitorThread.start();
 	}
 
@@ -134,38 +149,52 @@ public class UserPanelQueue implements IUserPanelQueue {
 	public class UserPanelQueueMonitorThread implements Runnable {
 		@Override
 		public void run() {
-			// while (true)
-			{
-				// try {
-				// Thread.sleep(5000);
+			while (true) {
+				try {
+					Thread.sleep(1000); // 5000
 
-				// Code to stop car if alarm is pressed.
-				if (car.getStatus().equals(CarStatus.ALARM_PRESSED)) {
-					// break;
-					return;
-				}
-
-				while (queueUserPanelRequestUp.size() != 0 || queueUserPanelRequestDown.size() != 0) {
-					while (queueUserPanelRequestUp.size() != 0) {
-						UserPanelRequest userPanelRequest = queueUserPanelRequestUp.pollFirst();
-						currentRequestedFloor = userPanelRequest.getDestinationFloorNumber();
-						System.out.println("Reading request from queueUp ...." + userPanelRequest.getDestinationFloorNumber());
-						ICarController carController = car.getCarController();
-						carController.processRequest(userPanelRequest.getDestinationFloorNumber(), Direction.UP);
+					// Code to stop car if alarm is pressed.
+					if (car.getStatus().equals(CarStatus.ALARM_PRESSED)) {
+						break;
+						// return;
 					}
 
-					while (queueUserPanelRequestDown.size() != 0) {
-						UserPanelRequest userPanelRequest = queueUserPanelRequestDown.pollFirst();
-						System.out.println("Reading request from queueDown ...." + userPanelRequest.getDestinationFloorNumber());
-						ICarController carController = car.getCarController();
-						carController.processRequest(userPanelRequest.getDestinationFloorNumber(), Direction.DOWN);
-					}
-				}
+					while (queueUserPanelRequestUp.size() != 0
+							|| queueUserPanelRequestDown.size() != 0) {
+						while (queueUserPanelRequestUp.size() != 0) {
+							UserPanelRequest userPanelRequest = queueUserPanelRequestUp
+									.pollFirst();
+							currentRequestedFloor = userPanelRequest
+									.getDestinationFloorNumber();
+							System.out
+									.println("Reading request from queueUp ...."
+											+ userPanelRequest
+													.getDestinationFloorNumber());
+							ICarController carController = car
+									.getCarController();
+							carController.processRequest(userPanelRequest
+									.getDestinationFloorNumber(), Direction.UP);
+						}
 
-				car.setStatus(CarStatus.IDLE);
-				// } catch (InterruptedException e) {
-				// e.printStackTrace();
-				// }
+						while (queueUserPanelRequestDown.size() != 0) {
+							UserPanelRequest userPanelRequest = queueUserPanelRequestDown
+									.pollFirst();
+							System.out
+									.println("Reading request from queueDown ...."
+											+ userPanelRequest
+													.getDestinationFloorNumber());
+							ICarController carController = car
+									.getCarController();
+							carController.processRequest(userPanelRequest
+									.getDestinationFloorNumber(),
+									Direction.DOWN);
+						}
+					}
+
+					car.setStatus(CarStatus.IDLE);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 	}

@@ -64,7 +64,8 @@ public class Car implements ICar {
 
 	public JPanel createCar() {
 
-		carUI = new CarUI(currentFloorNumber, carName, door, userPanel, doorPanel);
+		carUI = new CarUI(currentFloorNumber, carName, door, userPanel,
+				doorPanel);
 		return carUI;
 	}
 
@@ -76,7 +77,10 @@ public class Car implements ICar {
 		this.currentFloorNumber = currentFloorNumber;
 		if (carUI != null) {
 			carUI.setCurrentFloorNumber(currentFloorNumber);
-			this.carController.getFloorPanel().processStatusRequest(this.carRunnable.destinationFloorNumber, currentFloorNumber);
+			this.carController.getFloorPanel()
+					.processStatusRequest(
+							this.carRunnable.destinationFloorNumber,
+							currentFloorNumber);
 		}
 	}
 
@@ -84,13 +88,15 @@ public class Car implements ICar {
 	public void processAlarmRequest(int currentFloorNumber, int currentCarNumber) {
 		this.currentFloorNumber = currentFloorNumber;
 		this.carID = currentCarNumber;
-		this.carController.getFloorPanel().processAlarmRequest(currentFloorNumber, currentCarNumber);
+		this.carController.getFloorPanel().processAlarmRequest(
+				currentFloorNumber, currentCarNumber);
 	}
 
 	public void processAlarmReset(int currentFloorNumber, int currentCarNumber) {
 		this.currentFloorNumber = currentFloorNumber;
 		this.carID = currentCarNumber;
-		this.carController.getFloorPanel().processAlarmReset(currentFloorNumber, currentCarNumber);
+		this.carController.getFloorPanel().processAlarmReset(
+				currentFloorNumber, currentCarNumber);
 	}
 
 	// --------------
@@ -218,14 +224,17 @@ class CarRunnable implements Runnable {
 	@Override
 	public void run() {
 
-		car.getCarController().getFloorPanel().processIndicatorRequest(destinationFloorNumber, car.getCarID(), car.getCarType());
+		car.getCarController()
+				.getFloorPanel()
+				.processIndicatorRequest(destinationFloorNumber,
+						car.getCarID(), car.getCarType());
 		if (direction.equalsIgnoreCase("UP")) {
 
 			synchronized (car) {
 				/** 10/23/2011 - Snigdha, Check for alarm pressed status added **/
 				while (car.getCurrentFloorNumber() != destinationFloorNumber) {
 					try {
-						Thread.sleep(2000);
+						Thread.sleep(500); // 2000
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -239,21 +248,23 @@ class CarRunnable implements Runnable {
 					car.setStatus(CarStatus.STOPPED);
 
 					try {
-						Thread.currentThread().sleep(2000);
+						Thread.sleep(500); // 2000
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					System.out.println("Reached destination " + destinationFloorNumber);
+					System.out.println("Reached destination "
+							+ destinationFloorNumber);
 					car.notifyAll();
 				} else
 					System.out.println("Car.java: Alarm pressed");
 			}
 		} else {
 			synchronized (car) {
-				while (car.getCurrentFloorNumber() != destinationFloorNumber && car.getStatus() != CarStatus.ALARM_PRESSED) {
+				while (car.getCurrentFloorNumber() != destinationFloorNumber
+						&& car.getStatus() != CarStatus.ALARM_PRESSED) {
 					try {
-						Thread.sleep(2000);
+						Thread.sleep(500); // 2000
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -265,12 +276,13 @@ class CarRunnable implements Runnable {
 					car.setStatus(CarStatus.STOPPED);
 
 					try {
-						Thread.currentThread().sleep(2000);
+						Thread.sleep(500); // 2000
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					System.out.println("Reached destination " + destinationFloorNumber);
+					System.out.println("Reached destination "
+							+ destinationFloorNumber);
 					car.notifyAll();
 				} else
 					System.out.println("Car.java: Alarm pressed");
