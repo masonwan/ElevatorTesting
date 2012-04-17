@@ -234,7 +234,7 @@ class CarRunnable implements Runnable {
 				/** 10/23/2011 - Snigdha, Check for alarm pressed status added **/
 				while (car.getCurrentFloorNumber() != destinationFloorNumber) {
 					try {
-						Thread.sleep(500); // 2000
+						Thread.sleep(1000); // 2000
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -248,7 +248,7 @@ class CarRunnable implements Runnable {
 					car.setStatus(CarStatus.STOPPED);
 
 					try {
-						Thread.sleep(500); // 2000
+						Thread.sleep(1000); // 2000
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -264,7 +264,7 @@ class CarRunnable implements Runnable {
 				while (car.getCurrentFloorNumber() != destinationFloorNumber
 						&& car.getStatus() != CarStatus.ALARM_PRESSED) {
 					try {
-						Thread.sleep(500); // 2000
+						Thread.sleep(1000); // 2000
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -276,7 +276,7 @@ class CarRunnable implements Runnable {
 					car.setStatus(CarStatus.STOPPED);
 
 					try {
-						Thread.sleep(500); // 2000
+						Thread.sleep(1000); // 2000
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
