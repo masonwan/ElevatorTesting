@@ -155,7 +155,7 @@ public class UserPanelQueue implements IUserPanelQueue {
 
 					// Code to stop car if alarm is pressed.
 					if (car.getStatus().equals(CarStatus.ALARM_PRESSED)) {
-						break;
+						continue;
 						// return;
 					}
 
