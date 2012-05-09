@@ -132,12 +132,14 @@ public class UserPanelQueue implements IUserPanelQueue {
 		return pathLength;
 	}
 
+	Thread userPanelQueueMonitorThread = null;
+
 	// This method is not testable since userPanelQueueMonitorThread is not
 	// accessible.
 	@Override
 	public void setCar(ICar car) {
 		this.car = car;
-		Thread userPanelQueueMonitorThread = new Thread(
+		userPanelQueueMonitorThread = new Thread(
 				new UserPanelQueueMonitorThread());
 		userPanelQueueMonitorThread.start();
 	}
@@ -155,8 +157,7 @@ public class UserPanelQueue implements IUserPanelQueue {
 
 					// Code to stop car if alarm is pressed.
 					if (car.getStatus().equals(CarStatus.ALARM_PRESSED)) {
-						break;
-						// return;
+						return;
 					}
 
 					while (queueUserPanelRequestUp.size() != 0

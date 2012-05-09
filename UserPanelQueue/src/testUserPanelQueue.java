@@ -92,7 +92,9 @@ public class TestUserPanelQueue {
 		TestData data = new TestData();
 		data.queue.setCurrentRequestedFloor(1);
 		data.downList.add(new UserPanelRequest(1, data.car));
-		assertEquals(true, data.queue.isRequestAlreadyQueued(new UserPanelRequest(1, data.car)));
+		assertEquals(true,
+				data.queue.isRequestAlreadyQueued(new UserPanelRequest(1,
+						data.car)));
 	}
 
 	@Test
@@ -100,7 +102,9 @@ public class TestUserPanelQueue {
 		TestData data = new TestData();
 		data.queue.setCurrentRequestedFloor(1);
 		data.downList.add(new UserPanelRequest(1, data.car));
-		assertEquals(false, data.queue.isRequestAlreadyQueued(new UserPanelRequest(2, data.car)));
+		assertEquals(false,
+				data.queue.isRequestAlreadyQueued(new UserPanelRequest(2,
+						data.car)));
 	}
 
 	@Test
@@ -228,7 +232,9 @@ public class TestUserPanelQueue {
 		data.downList.add(new UserPanelRequest(2, data.car));
 		data.downList.add(new UserPanelRequest(3, data.car));
 
-		assertEquals(true, data.queue.isRequestAlreadyQueued(new UserPanelRequest(3, data.car)));
+		assertEquals(true,
+				data.queue.isRequestAlreadyQueued(new UserPanelRequest(3,
+						data.car)));
 	}
 
 	@Test
@@ -240,7 +246,9 @@ public class TestUserPanelQueue {
 		data.downList.add(new UserPanelRequest(1, data.car));
 		data.downList.add(new UserPanelRequest(2, data.car));
 
-		assertEquals(false, data.queue.isRequestAlreadyQueued(new UserPanelRequest(4, data.car)));
+		assertEquals(false,
+				data.queue.isRequestAlreadyQueued(new UserPanelRequest(4,
+						data.car)));
 	}
 
 	@Test
@@ -301,8 +309,15 @@ public class TestUserPanelQueue {
 	public void BP_16() {
 		TestData data = new TestData();
 
-		UserPanelQueue.UserPanelQueueMonitorThread thread = data.queue.new UserPanelQueueMonitorThread();
-		thread.run();
+		UserPanelQueue.UserPanelQueueMonitorThread runable = data.queue.new UserPanelQueueMonitorThread();
+
+		Thread t = new Thread(runable);
+		t.start();
+		try {
+			t.join(2000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 
 		assertEquals(false, data.controller.isUp);
 		assertEquals(false, data.controller.isDown);
@@ -314,8 +329,15 @@ public class TestUserPanelQueue {
 		TestData data = new TestData();
 		data.upList.add(new UserPanelRequest(3, data.car));
 
-		UserPanelQueue.UserPanelQueueMonitorThread thread = data.queue.new UserPanelQueueMonitorThread();
-		thread.run();
+		UserPanelQueue.UserPanelQueueMonitorThread runable = data.queue.new UserPanelQueueMonitorThread();
+
+		Thread t = new Thread(runable);
+		t.start();
+		try {
+			t.join(2000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 
 		assertEquals(true, data.controller.isUp);
 		assertEquals(false, data.controller.isDown);
@@ -328,8 +350,15 @@ public class TestUserPanelQueue {
 		data.car.setCurrentFloorNumber(2);
 		data.downList.add(new UserPanelRequest(1, data.car));
 
-		UserPanelQueue.UserPanelQueueMonitorThread thread = data.queue.new UserPanelQueueMonitorThread();
-		thread.run();
+		UserPanelQueue.UserPanelQueueMonitorThread runable = data.queue.new UserPanelQueueMonitorThread();
+
+		Thread t = new Thread(runable);
+		t.start();
+		try {
+			t.join(2000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 
 		assertEquals(false, data.controller.isUp);
 		assertEquals(true, data.controller.isDown);
@@ -439,20 +468,23 @@ public class TestUserPanelQueue {
 	public void CP_4() {
 		TestData data = new TestData();
 		data.upList.add(new UserPanelRequest(1, data.car));
-		assertTrue(data.queue.isRequestAlreadyQueued(new UserPanelRequest(1, data.car)));
+		assertTrue(data.queue.isRequestAlreadyQueued(new UserPanelRequest(1,
+				data.car)));
 	}
 
 	@Test
 	public void CP_5() {
 		TestData data = new TestData();
 		data.downList.add(new UserPanelRequest(2, data.car));
-		assertTrue(data.queue.isRequestAlreadyQueued(new UserPanelRequest(2, data.car)));
+		assertTrue(data.queue.isRequestAlreadyQueued(new UserPanelRequest(2,
+				data.car)));
 	}
 
 	@Test
 	public void CP_6() {
 		TestData data = new TestData();
-		assertFalse(data.queue.isRequestAlreadyQueued(new UserPanelRequest(1, data.car)));
+		assertFalse(data.queue.isRequestAlreadyQueued(new UserPanelRequest(1,
+				data.car)));
 	}
 
 	@Test
@@ -551,7 +583,8 @@ public class TestUserPanelQueue {
 		TestData data = new TestData();
 		data.upList.add(new UserPanelRequest(1, data.car));
 		data.downList.add(new UserPanelRequest(2, data.car));
-		assertFalse(data.queue.isRequestAlreadyQueued(new UserPanelRequest(3, data.car)));
+		assertFalse(data.queue.isRequestAlreadyQueued(new UserPanelRequest(3,
+				data.car)));
 	}
 
 	@Test
@@ -559,7 +592,8 @@ public class TestUserPanelQueue {
 		TestData data = new TestData();
 		data.upList.add(new UserPanelRequest(1, data.car));
 		data.downList.add(new UserPanelRequest(2, data.car));
-		assertTrue(data.queue.isRequestAlreadyQueued(new UserPanelRequest(2, data.car)));
+		assertTrue(data.queue.isRequestAlreadyQueued(new UserPanelRequest(2,
+				data.car)));
 	}
 
 	@Test
@@ -567,7 +601,8 @@ public class TestUserPanelQueue {
 		TestData data = new TestData();
 		data.upList.add(new UserPanelRequest(1, data.car));
 		data.downList.add(new UserPanelRequest(2, data.car));
-		assertTrue(data.queue.isRequestAlreadyQueued(new UserPanelRequest(1, data.car)));
+		assertTrue(data.queue.isRequestAlreadyQueued(new UserPanelRequest(1,
+				data.car)));
 	}
 
 	@Test
@@ -575,7 +610,8 @@ public class TestUserPanelQueue {
 		TestData data = new TestData();
 		data.upList.add(new UserPanelRequest(1, data.car));
 		data.downList.add(new UserPanelRequest(1, data.car));
-		assertTrue(data.queue.isRequestAlreadyQueued(new UserPanelRequest(1, data.car)));
+		assertTrue(data.queue.isRequestAlreadyQueued(new UserPanelRequest(1,
+				data.car)));
 	}
 
 	@Test
@@ -627,14 +663,13 @@ public class TestUserPanelQueue {
 
 class TestData {
 	public TestedUserPanelQueue queue = new TestedUserPanelQueue();
-	public LinkedList<UserPanelRequest> upList = queue.getQueueUserPanelRequestUp();
-	public LinkedList<UserPanelRequest> downList = queue.getQueueUserPanelRequestDown();
+	public LinkedList<UserPanelRequest> upList = queue
+			.getQueueUserPanelRequestUp();
+	public LinkedList<UserPanelRequest> downList = queue
+			.getQueueUserPanelRequestDown();
 	public TestedCarController controller = new TestedCarController();
 	public Car car = new Car();
 	public IDoor door = new SingleDoor();
-
-	// public FloorPanel floorPanel = new FloorPanel();
-	// public UserPanel userPanel = new UserPanel();
 
 	public TestData() {
 		queue = new TestedUserPanelQueue();
@@ -650,18 +685,6 @@ class TestData {
 
 		door = new SingleDoor();
 		door.setCarController(controller);
-
-		// userPanel = new UserPanel();
-		// userPanel.setCar(car);
-		// userPanel.createUserPanel();
-		//
-		// floorPanel = new FloorPanel();
-		// floorPanel.setButtonColor(FloorPanelColor.BLUE);
-		// floorPanel.createFloorPanel(1);
-
-		// car.setDoor(door);
-		// car.setUserPanel(userPanel);
-		// controller.setFloorPanel(floorPanel);
 	}
 }
 
@@ -673,8 +696,9 @@ class TestedUserPanelQueue extends UserPanelQueue {
 		this.car = car;
 	}
 
-	public void runThead() {
-		userPanelQueueMonitorThread = new Thread(new UserPanelQueueMonitorThread());
+	public void runThread() {
+		userPanelQueueMonitorThread = new Thread(
+				new UserPanelQueueMonitorThread());
 		userPanelQueueMonitorThread.start();
 	}
 }
